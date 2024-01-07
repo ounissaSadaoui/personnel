@@ -1,0 +1,3 @@
+EMPLOYE : id employe, nom, prenom, mail, password
+APPARTENIR, 01 EMPLOYE, ON LIGUE
+LIGUE : id ligue, nom ligue
