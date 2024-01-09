@@ -1,0 +1,6 @@
+Ligue: ID_ligue, nom_ligue
+GÉRER, 11 Employé, 11 Ligue, 0N Super_Admin
+Super_Admin: ID_super_Admin, nom_super_Admin, prénom_super_Admin, password_super_Admin
+
+APPARTENIR, 0N Ligue, 11 Employé
+Employé: ID_employé, nom_employe, prenom_employe, mail_employé, password_employé
