@@ -1,19 +1,23 @@
 {
-  "width": 328,
-  "height": 136,
+  "width": 243,
+  "height": 229,
   "cx": [
-    [ "EMPLOYE", 48 ],
-    [ "APPARTENIR", 167 ],
-    [ "LIGUE", 283 ]
+    [ "LIGUE", 46 ],
+    [ "APPARTENIR", 170 ],
+    [ "GERER", 46 ],
+    [ "EMPLOYE", 170 ]
   ],
   "cy": [
-    [ "EMPLOYE", 68 ],
-    [ "APPARTENIR", 68 ],
-    [ "LIGUE", 68 ]
+    [ "LIGUE", 43 ],
+    [ "APPARTENIR", 43 ],
+    [ "GERER", 161 ],
+    [ "EMPLOYE", 161 ]
   ],
   "shift": [
     [ "APPARTENIR,EMPLOYE,0", 0 ],
-    [ "APPARTENIR,LIGUE,0", 0 ]
+    [ "APPARTENIR,LIGUE,0", 0 ],
+    [ "GERER,EMPLOYE,0", 0 ],
+    [ "GERER,LIGUE,0", 0 ]
   ],
   "ratio": []
 }

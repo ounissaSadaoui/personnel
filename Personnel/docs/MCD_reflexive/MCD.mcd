@@ -1,5 +1,0 @@
-APPARTENIR, 01 Ligue, 0N Employe
-Ligue: id_ligue, nom_ligue
-
-Employe: id_employé, nom_employé, prenom_employé, mail_employé, password_employé
-GERER, 1N Ligue, 01 Employe, 0N Employe
