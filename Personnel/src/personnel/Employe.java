@@ -68,12 +68,18 @@ public class Employe implements Serializable, Comparable<Employe>
 	
 	/**
 	 * Retourne la date d'arrivée de l'employé.
-	 * @return la date d'arrivée de l'employé. 
+	 * @param la date d'arrivée de l'employé. 
 	 */
 	
 	public void setdateArrivee(LocalDate dateArrivee)
 	{
 		this.dateArrivee = dateArrivee;
+		
+		/* gerer l'exception si la date de départ est antiérieur a la date de départ */ 
+		
+		// if (dateArrivee != null && dateDepart != null && dateDepart.isBefore(dateArrivee)) { }
+		
+		
 	}
 	
 	/**
@@ -84,6 +90,16 @@ public class Employe implements Serializable, Comparable<Employe>
 	public LocalDate getdateDepart()
 	{
 		return dateDepart;
+	}
+	
+	/**
+	 * change la date de départ de l'employé.
+	 * @param la date de départ de l'employé. 
+	 */
+	
+	public void setdateDepart(LocalDate dateDepart)
+	{
+		this.dateDepart = dateDepart;
 	}
 	
 	/**
