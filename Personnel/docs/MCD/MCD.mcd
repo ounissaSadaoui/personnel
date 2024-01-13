@@ -3,4 +3,4 @@ APPARTENIR,01 Employé, 0N Ligue
 
 
 GERER, 01 Employé, 01 Ligue
-Employé: ID_employé, nom_employé, prénom_employé, mail_employé,password_employé
+Employé: ID_employé, nom_employé, prénom_employé, mail_employé,password_employé, dateArrivée, dateDepart
