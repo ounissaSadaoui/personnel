@@ -15,7 +15,7 @@ public class Employe implements Serializable, Comparable<Employe>
 {
 	private static final long serialVersionUID = 4795721718037994734L;
 	private String nom, prenom, password, mail;
-	static LocalDate dateArrivee, dateDepart;
+	private LocalDate dateArrivee, dateDepart;
 	private Ligue ligue;
 	private GestionPersonnel gestionPersonnel;
 	
@@ -87,7 +87,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * @return la date de départ de l'employé. 
 	 */
 	
-	public LocalDate getdateDepart()
+	public LocalDate getdateDepart() 
 	{
 		return dateDepart;
 	}
@@ -97,9 +97,14 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * @param la date de départ de l'employé. 
 	 */
 	
-	public void setdateDepart(LocalDate dateDepart)
+	public void setdateDepart(LocalDate dateDepart) throws dateInvalide
 	{
-		this.dateDepart = dateDepart;
+		if (dateArrivee != null && dateDepart != null && dateDepart.isBefore(dateArrivee)) { 
+			throw new dateInvalide;
+		}else {
+			this.dateDepart = dateDepart;
+		}
+
 	}
 	
 	/**
