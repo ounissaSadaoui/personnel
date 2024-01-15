@@ -19,8 +19,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	private Ligue ligue;
 	private GestionPersonnel gestionPersonnel;
 	
-	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, 
-			String password, LocalDate dateArrivee, LocalDate dateDepart)
+	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart)
 	{
 		this.gestionPersonnel = gestionPersonnel;
 		this.nom = nom;
@@ -28,7 +27,7 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.password = password;
 		this.mail = mail;
 		this.ligue = ligue;
-		this.dateArrivee = LocalDate.now();
+		this.dateArrivee = dateArrivee;
 		this.dateDepart = LocalDate.now();
 	}
 	
@@ -73,13 +72,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	
 	public void setdateArrivee(LocalDate dateArrivee)
 	{
-		this.dateArrivee = dateArrivee;
-		
-		/* gerer l'exception si la date de départ est antiérieur a la date de départ */ 
-		
-		// if (dateArrivee != null && dateDepart != null && dateDepart.isBefore(dateArrivee)) { }
-		
-		
+		this.dateArrivee = dateArrivee;		
 	}
 	
 	/**
@@ -97,14 +90,14 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * @param la date de départ de l'employé. 
 	 */
 	
-	public void setdateDepart(LocalDate dateDepart) throws dateInvalide
+	public void setdateDepart(LocalDate dateDepart) throws DateInvalide
 	{
 		if (dateArrivee != null && dateDepart != null && dateDepart.isBefore(dateArrivee)) { 
-			throw new dateInvalide;
-		}else {
+			this.dateDepart = null;
+			throw new DateInvalide(new Exception("La date de départ est invalide"));
+		} else {
 			this.dateDepart = dateDepart;
 		}
-
 	}
 	
 	/**
