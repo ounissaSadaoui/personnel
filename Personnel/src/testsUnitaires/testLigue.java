@@ -12,6 +12,7 @@ class testLigue
 {
 	GestionPersonnel gestionPersonnel = GestionPersonnel.getGestionPersonnel();
 	
+	
 	@Test
 	void createLigue() throws SauvegardeImpossible
 	{
