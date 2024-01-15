@@ -15,7 +15,7 @@ public class Employe implements Serializable, Comparable<Employe>
 {
 	private static final long serialVersionUID = 4795721718037994734L;
 	private String nom, prenom, password, mail;
-	private LocalDate dateArrivee = null, dateDepart = null;
+	private LocalDate dateArrivee , dateDepart;
 	private Ligue ligue;
 	private GestionPersonnel gestionPersonnel;
 	
