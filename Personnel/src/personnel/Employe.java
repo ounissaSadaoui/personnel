@@ -15,7 +15,7 @@ public class Employe implements Serializable, Comparable<Employe>
 {
 	private static final long serialVersionUID = 4795721718037994734L;
 	private String nom, prenom, password, mail;
-	private LocalDate dateArrivee, dateDepart;
+	private LocalDate dateArrivee = null, dateDepart = null;
 	private Ligue ligue;
 	private GestionPersonnel gestionPersonnel;
 	
@@ -28,7 +28,8 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.mail = mail;
 		this.ligue = ligue;
 		this.dateArrivee = dateArrivee;
-		this.dateDepart = LocalDate.now();
+		this.dateDepart = dateDepart;
+
 	}
 	
 	/**
@@ -70,9 +71,14 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * @param la date d'arrivée de l'employé. 
 	 */
 	
-	public void setdateArrivee(LocalDate dateArrivee)
-	{
-		this.dateArrivee = dateArrivee;		
+	public void setdateArrivee(LocalDate dateArrivee) throws DateInvalide
+	{ 
+		if (dateDepart != null && dateArrivee != null && dateArrivee.isAfter(dateDepart)){
+			throw new DateInvalide(new Exception("La date de d'arrivée ne peut être postérieure à celle de départ"));
+		}else {
+			this.dateArrivee = dateArrivee;		
+
+		}
 	}
 	
 	/**
@@ -92,9 +98,8 @@ public class Employe implements Serializable, Comparable<Employe>
 	
 	public void setdateDepart(LocalDate dateDepart) throws DateInvalide
 	{
-		if (dateArrivee != null && dateDepart != null && dateDepart.isBefore(dateArrivee)) { 
-			this.dateDepart = null;
-			throw new DateInvalide(new Exception("La date de départ est invalide"));
+		if ((dateArrivee != null && dateDepart != null && dateDepart.isBefore(dateArrivee)) || (dateArrivee == null && dateDepart != null )) { 
+			throw new DateInvalide(new Exception("La date de départ ne peut être antérieure à celle d'arrivée"));
 		} else {
 			this.dateDepart = dateDepart;
 		}
