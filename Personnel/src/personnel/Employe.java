@@ -22,7 +22,14 @@ public class Employe implements Serializable, Comparable<Employe>
 	private Ligue ligue;
 	private GestionPersonnel gestionPersonnel;
 	
-	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart)
+	Employe(GestionPersonnel gestionPersonnel, 
+			Ligue ligue, 
+			String nom, 
+			String prenom, 
+			String mail, 
+			String password, 
+			LocalDate dateArrivee, 
+			LocalDate dateDepart) throws DateInvalide
 {
 		this.gestionPersonnel = gestionPersonnel;
 		this.nom = nom;
@@ -30,8 +37,9 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.password = password;
 		this.mail = mail;
 		this.ligue = ligue;
-		this.dateArrivee = dateArrivee;
-		this.dateDepart = dateDepart;
+		// on passe par les setter pour pouvoir valider les dates
+		setDateArrivee(dateArrivee);
+		setDateDepart(dateDepart);
 		
     }
 
@@ -65,7 +73,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * @return la date d'arrivée de l'employé. 
 	 */
 	
-	public LocalDate getdateArrivee()
+	public LocalDate getDateArrivee()
 	{
 		return dateArrivee;
 	}
@@ -75,28 +83,15 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * @param la date d'arrivée de l'employé. 
 	 */
 	
-	public void setdateArrivee(LocalDate dateArrivee) throws DateInvalide, DateTimeParseException
+	public void setDateArrivee(LocalDate dateArrivee) throws DateInvalide
 	{   
-		//on compare notre date à ce format
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
 		//cas date depart avant date arrivee
         if (dateDepart != null && dateArrivee != null && dateArrivee.isAfter(dateDepart)) {
-            throw new DateInvalide(new Exception("La date d'arrivée ne peut être postérieure à celle de départ"));
-        //cas ou la date n'est pas nulle mais pas valable quand meme 
-        } else if (dateArrivee != null) {
-            try {
-                // Essayer de créer un objet LocalDate à partir de la chaîne de texte
-                LocalDate parsedDate = LocalDate.parse(dateArrivee.format(format), format);
-                this.dateArrivee = parsedDate;
-            } catch (DateTimeParseException e) {
-                throw new DateTimeParseException("Format de date invalide", dateArrivee.toString(), e.getErrorIndex());
-            }
+            throw new DateInvalide("La date d'arrivée ne peut être postérieure à celle de départ");
         } else {
             //dans les autres cas
             this.dateArrivee = dateArrivee;
         }
-	    
 	}
 	
 	/**
@@ -104,7 +99,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * @return la date de départ de l'employé. 
 	 */
 	
-	public LocalDate getdateDepart() 
+	public LocalDate getDateDepart() 
 	{
 		return dateDepart;
 	}
@@ -114,26 +109,14 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * @param la date de départ de l'employé. 
 	 */
 	
-	public void setdateDepart(LocalDate dateDepart) throws DateInvalide, DateTimeParseException
+	public void setDateDepart(LocalDate dateDepart) throws DateInvalide, DateTimeParseException
 	{
-		 
-		
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
 		if ((dateArrivee != null && dateDepart != null && dateDepart.isBefore(dateArrivee)) || (dateArrivee == null && dateDepart != null )) { 
-			throw new DateInvalide(new Exception("La date de départ ne peut être antérieure à celle d'arrivée"));
-		 } else if (dateDepart!= null) {
-	            try {
-	                // Essayer de créer un objet LocalDate à partir de la chaîne de texte
-	                LocalDate parsedDate = LocalDate.parse(dateDepart.format(format), format);
-	                this.dateDepart = parsedDate;
-	            } catch (DateTimeParseException e) {
-	                throw new DateTimeParseException("Format de date invalide", dateDepart.toString(), e.getErrorIndex());
-	            }
-	        } else {
-	            //dans les autres cass
-	            this.dateDepart = dateDepart;
-	        }
+			throw new DateInvalide("La date de départ ne peut être antérieure à celle d'arrivée");
+	    } else {
+	        //dans les autres cass
+	        this.dateDepart = dateDepart;
+	    }
 	}
 	
 	/**

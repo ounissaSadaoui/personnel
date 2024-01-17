@@ -20,7 +20,7 @@ public class GestionPersonnel implements Serializable
 	private static final long serialVersionUID = -105283113987886425L;
 	private static GestionPersonnel gestionPersonnel = null;
 	private SortedSet<Ligue> ligues;
-	private Employe root = new Employe(this, null, "root", "", "", "toor", null, null);
+	private Employe root;
 	public final static int SERIALIZATION = 1, JDBC = 2, 
 			TYPE_PASSERELLE = SERIALIZATION;  
 	private static Passerelle passerelle = TYPE_PASSERELLE == JDBC ? new jdbc.JDBC() : new serialisation.Serialization();	
@@ -29,6 +29,7 @@ public class GestionPersonnel implements Serializable
 	 * Retourne l'unique instance de cette classe.
 	 * Crée cet objet s'il n'existe déjà.
 	 * @return l'unique objet de type {@link GestionPersonnel}.
+	 * @throws DateInvalide 
 	 */
 	
 	public static GestionPersonnel getGestionPersonnel()
@@ -44,8 +45,14 @@ public class GestionPersonnel implements Serializable
 
 	public GestionPersonnel()
 	{
-		if (gestionPersonnel != null)
-			throw new RuntimeException("Vous ne pouvez créer qu'une seuls instance de cet objet.");
+		if (gestionPersonnel != null) {
+			throw new RuntimeException("Vous ne pouvez créer qu'une seule instance de cet objet.");
+		}
+		try {
+			root = new Employe(this, null, "root", "", "", "toor", null, null);
+		} catch (DateInvalide e) {
+			// On ne fait rien car on sait qu'il ne peut rien se passer ici, la creation de root est forcément valide
+		}
 		ligues = new TreeSet<>();
 		gestionPersonnel = this;
 	}
