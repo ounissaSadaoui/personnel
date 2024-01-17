@@ -1,21 +1,11 @@
 package personnel;
 
-public class DateInvalide extends Exception 
-{
-	
-	Exception exception;
-	
-	public DateInvalide(Exception exception)
-	{
-		this.exception = exception;
-	}
-	
-	@Override
-	public void printStackTrace() 
-	{
-			super.printStackTrace();
-			System.err.println("Causé par : ");
-			exception.printStackTrace();			
-	}
+public class DateInvalide extends Exception {
+	private static final long serialVersionUID = -8548575407019030238L;
 
+	public DateInvalide (Exception exception) {
+		
+	}
 }
+
+

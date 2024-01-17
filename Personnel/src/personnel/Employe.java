@@ -2,6 +2,8 @@ package personnel;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.*;
+import personnel.DateInvalide;
 
 /**
  * Employé d'une ligue hébergée par la M2L. Certains peuvent 
@@ -11,7 +13,7 @@ import java.time.LocalDate;
  * il faut passer la méthode {@link Ligue#addEmploye addEmploye}.
  */
 
-public class Employe implements Serializable, Comparable<Employe>
+public class Employe implements Serializable, Comparable<Employe> 
 
 {
 	private static final long serialVersionUID = 4795721718037994734L;
@@ -21,7 +23,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	private GestionPersonnel gestionPersonnel;
 	
 	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart)
-	{
+{
 		this.gestionPersonnel = gestionPersonnel;
 		this.nom = nom;
 		this.prenom = prenom;
@@ -30,8 +32,9 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.ligue = ligue;
 		this.dateArrivee = dateArrivee;
 		this.dateDepart = dateDepart;
+		
+    }
 
-	}
 	
 	/**
 	 * Retourne vrai ssi l'employé est administrateur de la ligue 
@@ -72,14 +75,28 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * @param la date d'arrivée de l'employé. 
 	 */
 	
-	public void setdateArrivee(LocalDate dateArrivee) throws DateInvalide
-	{ 
-		if (dateDepart != null && dateArrivee != null && dateArrivee.isAfter(dateDepart)){
-			throw new DateInvalide(new Exception("La date de d'arrivée ne peut être postérieure à celle de départ"));
-		}else {
-			this.dateArrivee = dateArrivee;		
+	public void setdateArrivee(LocalDate dateArrivee) throws DateInvalide, DateTimeParseException
+	{   
+		//on compare notre date à ce format
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-		}
+		//cas date depart avant date arrivee
+        if (dateDepart != null && dateArrivee != null && dateArrivee.isAfter(dateDepart)) {
+            throw new DateInvalide(new Exception("La date d'arrivée ne peut être postérieure à celle de départ"));
+        //cas ou la date n'est pas nulle mais pas valable quand meme 
+        } else if (dateArrivee != null) {
+            try {
+                // Essayer de créer un objet LocalDate à partir de la chaîne de texte
+                LocalDate parsedDate = LocalDate.parse(dateArrivee.format(format), format);
+                this.dateArrivee = parsedDate;
+            } catch (DateTimeParseException e) {
+                throw new DateTimeParseException("Format de date invalide", dateArrivee.toString(), e.getErrorIndex());
+            }
+        } else {
+            //dans les autres cas
+            this.dateArrivee = dateArrivee;
+        }
+	    
 	}
 	
 	/**
@@ -97,13 +114,25 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * @param la date de départ de l'employé. 
 	 */
 	
-	public void setdateDepart(LocalDate dateDepart) throws DateInvalide
+	public void setdateDepart(LocalDate dateDepart) throws DateInvalide, DateTimeParseException
 	{
+		
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
 		if ((dateArrivee != null && dateDepart != null && dateDepart.isBefore(dateArrivee)) || (dateArrivee == null && dateDepart != null )) { 
 			throw new DateInvalide(new Exception("La date de départ ne peut être antérieure à celle d'arrivée"));
-		} else {
-			this.dateDepart = dateDepart;
-		}
+		 } else if (dateDepart!= null) {
+	            try {
+	                // Essayer de créer un objet LocalDate à partir de la chaîne de texte
+	                LocalDate parsedDate = LocalDate.parse(dateDepart.format(format), format);
+	                this.dateDepart = parsedDate;
+	            } catch (DateTimeParseException e) {
+	                throw new DateTimeParseException("Format de date invalide", dateDepart.toString(), e.getErrorIndex());
+	            }
+	        } else {
+	            //dans les autres cass
+	            this.dateDepart = dateDepart;
+	        }
 	}
 	
 	/**
