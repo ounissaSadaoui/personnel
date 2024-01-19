@@ -210,12 +210,9 @@ class testEmploye {
 	void testSetDateDepartDateNull() throws SauvegardeImpossible, DateInvalide
 	{
 		Ligue ligue = gestionPersonnel.addLigue("Liga");
-		Employe employe = ligue.addEmploye("Vinicius", "Junior", "vini.jr@gmail.com", "azerty", LocalDate.parse("2018-01-13"), null);
+		Employe employe = ligue.addEmploye("Vinicius", "Junior", "vini.jr@gmail.com", "azerty", LocalDate.parse("2018-01-13"), LocalDate.parse("2019-01-13"));
 		
-			 
-			//la dernière date inscrite est bien celle qui est conservée
-		assertEquals(LocalDate.parse("2024-04-13"), employe.getDateDepart());
-			//on remet la date à null
+
 		employe.setDateDepart(null);
 		assertEquals(null, employe.getDateDepart());
 	}
