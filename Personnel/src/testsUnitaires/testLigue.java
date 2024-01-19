@@ -28,21 +28,28 @@ class testLigue
 			Ligue lig = gestionPersonnel.addLigue("F");
 	 }, "le nom d'une ligue doit avoir au moins 2 caractères");
 		
-		//creation ligue et set admin (on en a besoin pour test suivant)
+	}
+	@Test //creation ligue et set admin (on en a besoin pour test suivant)
+	void employes() throws SauvegardeImpossible, DateInvalide
+	{
 		Ligue Viki = gestionPersonnel.addLigue("VIKING");
 		Employe Lagartha = Viki.addEmploye("Lagartha", "Queen", "Ragnar@viking.dkk","bjorn", null, null);
 		Viki.setAdministrateur(Lagartha);
 		assertEquals(Lagartha, Viki.getAdministrateur());
 		
+		Ligue spn = gestionPersonnel.addLigue("Supernatural 1 to :15");
 		//test sur le setteur:
 		spn.setNom("Dean");
 		assertEquals("Dean", spn.getNom());
 
-		//test sur getAdministrateur 
-		// ce test devrait prouver que si aucun admin n'est set, c'est le root qui est admin,
+	}
+	void admin() throws SauvegardeImpossible, DateInvalide
+	{
+		//recréer la ligue spn 
+		Ligue spn = gestionPersonnel.addLigue("Supernatural 1 to :15");
+		assertEquals(gestionPersonnel.getRoot(), spn.getAdministrateur());
+		Employe Lagartha = spn.addEmploye("Lagartha", "Queen", "Ragnar@viking.dkk","bjorn", null, null);
 
-	/*	spn.getAdministrateur();
-		assertEquals("root   (super-utilisateur)", spn.getAdministrateur());*/
 		Employe zizou = spn.addEmploye("Zinedine", "Zidane", "zz@zz.zz", "zz", null, null);
 		spn.setAdministrateur(zizou);
 		assertEquals(zizou, spn.getAdministrateur());
@@ -66,14 +73,30 @@ class testLigue
 		assertTrue(spn.getEmployes().contains(zizou));
 		
 		assertEquals(Bobby,spn.getAdministrateur());
-		
+	}
+		void rootEtAdmin() throws SauvegardeImpossible, DateInvalide
+		{
+		Ligue Viki = gestionPersonnel.addLigue("VIKING");
+		Employe Lagartha = Viki.addEmploye("Lagartha", "Queen", "Ragnar@viking.dkk","bjorn", null, null);
+
 		Viki.setAdministrateur(Lagartha);
 		Viki.remove(Lagartha);
 		assertEquals("VIKING", Viki.getNom());
 		//l'employe est bien supprimé de la ligue
 		assertFalse(Viki.getEmployes().contains(Lagartha));
 		//l'employe reste quand meme admin de la ligue
-        assertEquals(Lagartha, Viki.getAdministrateur());
+		
+		Employe root = gestionPersonnel.getRoot();
+        assertNotEquals(root, Viki.getAdministrateur());
+        
+        Viki.setAdministrateur(Lagartha);
+
+        assertEquals(Lagartha,Viki.getAdministrateur());
+        Viki.remove(Lagartha);
+        
+        Viki.setAdministrateur(gestionPersonnel.getRoot());
+		assertEquals(gestionPersonnel.getRoot(), Viki.getAdministrateur());
+		
 		
 	}
 
