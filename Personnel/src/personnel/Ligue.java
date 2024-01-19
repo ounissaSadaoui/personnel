@@ -120,7 +120,7 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		
 	}
 	//changé à public 
-    void remove(Employe employe)
+     void remove(Employe employe)
 	{
 		employes.remove(employe);
 	}

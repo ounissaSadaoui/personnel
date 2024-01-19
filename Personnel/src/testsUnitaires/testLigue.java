@@ -160,5 +160,14 @@ class testLigue
 		assertNull(employe.getNom());
 		//tets 
 	};
+	@Test 
+	void suppressionLigue() throws SauvegardeImpossible, DateInvalide
+	{
+		Ligue ligue1 = gestionPersonnel.addLigue("Ligue1");
+		Employe employe = ligue1.addEmploye("Vinicius", "Junior", "vini.jr@gmail.com", "azerty", null, null);
+        ligue1.remove();
+        assertEquals(false,gestionPersonnel.getLigues().contains(ligue1));
+        
+	}
 	
 }
