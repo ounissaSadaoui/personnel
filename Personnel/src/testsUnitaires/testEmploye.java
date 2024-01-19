@@ -185,7 +185,8 @@ class testEmploye {
 		assertEquals(LocalDate.parse("2024-04-13"), employe.getDateDepart());
 	}	
 	
-	@Test
+	@Test //tests sur le nom
+
 	void testSetNom() throws SauvegardeImpossible, DateInvalide {
 		Ligue ligue = gestionPersonnel.addLigue("Ligue1");
 		Employe employe = ligue.addEmploye("Vinicius", "Junior", "vini.jr@gmail.com", "azerty", null, null);
@@ -200,7 +201,8 @@ class testEmploye {
 		assertNull(employe.getNom());
 	}
 	
-	@Test
+	@Test //tests sur le prenom
+
 	void testSetPrenom() throws SauvegardeImpossible, DateInvalide {
 		Ligue ligue = gestionPersonnel.addLigue("Ligue1");
 		Employe employe = ligue.addEmploye("Vinicius", "Junior", "vini.jr@gmail.com", "azerty", null, null);
@@ -215,7 +217,8 @@ class testEmploye {
 		assertNull(employe.getPrenom());
 	}
 	
-	@Test
+	@Test //tests sur le mail
+
 	void testSetMail() throws SauvegardeImpossible, DateInvalide {
 		Ligue ligue = gestionPersonnel.addLigue("Liga");
 		Employe employe = ligue.addEmploye("Vinicius", "Junior", "vini.jr@gmail.com", "azerty", null, null);
@@ -230,7 +233,7 @@ class testEmploye {
 		assertNull(employe.getMail());
 	}
 	
-	@Test
+	@Test //tests sur le mot de passe
 	void testCheckPassword() throws SauvegardeImpossible, DateInvalide {
 		Ligue ligue = gestionPersonnel.addLigue("Liga");
 		Employe employe = ligue.addEmploye("Vinicius", "Junior", "vini.jr@gmail.com", "azerty", null, null);

@@ -35,9 +35,9 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		this.id = gestionPersonnel.insert(this); 
 	}
 
-	Ligue(GestionPersonnel gestionPersonnel, int id, String nom)
+	Ligue(GestionPersonnel gestionPersonnel, int id, String nom) throws SauvegardeImpossible
 	{
-		this.nom = nom;
+		this.setNom(nom);
 		employes = new TreeSet<>();
 		this.gestionPersonnel = gestionPersonnel;
 		administrateur = gestionPersonnel.getRoot();
@@ -59,9 +59,11 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	 * @param nom le nouveau nom de la ligue.
 	 */
 
-	public void setNom(String nom)
-	{
-		this.nom = nom;
+	public void setNom(String nom) throws SauvegardeImpossible {
+	    if ((nom.length() <= 2) || nom.isEmpty()) {
+	        throw new SauvegardeImpossible(new RuntimeException("SauvegardeImpossible"));
+	    }
+	    this.nom = nom;
 	}
 
 	/**
@@ -117,8 +119,8 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		return employe;
 		
 	}
-	
-	void remove(Employe employe)
+	//changé à public 
+	public void remove(Employe employe)
 	{
 		employes.remove(employe);
 	}

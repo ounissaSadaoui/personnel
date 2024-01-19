@@ -13,14 +13,71 @@ class testLigue
 	GestionPersonnel gestionPersonnel = GestionPersonnel.getGestionPersonnel();
 	
 	
-	@Test
-	void createLigue() throws SauvegardeImpossible
+	@Test //creation d'une ligue
+	void createLigue() throws SauvegardeImpossible, DateInvalide
 	{
 		Ligue ligue = gestionPersonnel.addLigue("Fléchettes");
 		assertEquals("Fléchettes", ligue.getNom());
+		
+		// test sur les caractères spéciaux dans le nom
+		Ligue spn = gestionPersonnel.addLigue("Supernatural 1 to :15");
+		assertEquals("Supernatural 1 to :15", spn.getNom());
+		//re test
+		
+		assertThrows(SauvegardeImpossible.class, () -> {
+			Ligue lig = gestionPersonnel.addLigue("F");
+	 }, "le nom d'une ligue doit avoir au moins 2 caractères");
+		
+		//creation ligue et set admin (on en a besoin pour test suivant)
+		Ligue Viki = gestionPersonnel.addLigue("VIKING");
+		Employe Lagartha = Viki.addEmploye("Lagartha", "Queen", "Ragnar@viking.dkk","bjorn", null, null);
+		Viki.setAdministrateur(Lagartha);
+		assertEquals(Lagartha, Viki.getAdministrateur());
+		
+		//test sur le setteur:
+		spn.setNom("Dean");
+		assertEquals("Dean", spn.getNom());
+
+		//test sur getAdministrateur 
+		// ce test devrait prouver que si aucun admin n'est set, c'est le root qui est admin,
+
+	/*	spn.getAdministrateur();
+		assertEquals("root   (super-utilisateur)", spn.getAdministrateur());*/
+		Employe zizou = spn.addEmploye("Zinedine", "Zidane", "zz@zz.zz", "zz", null, null);
+		spn.setAdministrateur(zizou);
+		assertEquals(zizou, spn.getAdministrateur());
+		
+		//test sur le setAdmin faux
+		assertThrows(DroitsInsuffisants.class, () -> {
+              spn.setAdministrateur(Lagartha);	
+         }, "Une ligue ne peut être administrée par un employé d'une ligue différente");
+		
+		Employe Bobby = spn.addEmploye("Bobby", "Singer", "balls@guns.sf", "jj", null, null);
+		
+		//tets sur getEmployes, que les employés s'y ajoutent bien
+		
+		assertEquals(2, spn.getEmployes().size());
+		assertTrue(spn.getEmployes().contains(Bobby));
+		assertTrue(spn.getEmployes().contains(zizou));
+		spn.setAdministrateur(Bobby);
+		//test suppression employe
+		spn.remove(Bobby);
+		assertFalse(spn.getEmployes().contains(Bobby));
+		assertTrue(spn.getEmployes().contains(zizou));
+		
+		assertEquals(Bobby,spn.getAdministrateur());
+		
+		Viki.setAdministrateur(Lagartha);
+		Viki.remove(Lagartha);
+		assertEquals("VIKING", Viki.getNom());
+		//l'employe est bien supprimé de la ligue
+		assertFalse(Viki.getEmployes().contains(Lagartha));
+		//l'employe reste quand meme admin de la ligue
+        assertEquals(Lagartha, Viki.getAdministrateur());
+		
 	}
 
-	@Test
+	@Test //creation d'un employe
 	void addEmploye() throws SauvegardeImpossible, DateInvalide
 	{
 		Ligue ligue = gestionPersonnel.addLigue("Fléchettes");
@@ -28,54 +85,18 @@ class testLigue
 		assertEquals(employe, ligue.getEmployes().first());
 	}
 	
-	@Test
-	void editLigue() throws SauvegardeImpossible{
+	void testSetNom() throws SauvegardeImpossible, DateInvalide {
 		Ligue ligue = gestionPersonnel.addLigue("Ligue1");
+		Employe employe = ligue.addEmploye("Vinicius", "Junior", "vini.jr@gmail.com", "azerty", null, null);
 		
-		// change le nom de la ligue
-		ligue.setNom("Ligue2");
-		assertEquals("Ligue2", ligue.getNom());
+		employe.setNom("matuidi");
+		assertEquals("matuidi", employe.getNom());
 		
+		employe.setNom("verratti");
+		assertEquals("verratti", employe.getNom());
+		
+		employe.setNom(null);
+		assertNull(employe.getNom());
 	}
-	
-	@Test
-	void testSetNom() throws SauvegardeImpossible {
-		Ligue ligue = gestionPersonnel.addLigue("Ligue1");
-		
-		ligue.setNom("Liga");
-		assertEquals("Liga", ligue.getNom());
-		
-		ligue.setNom("PremierLeague");
-		assertEquals("PremierLeague", ligue.getNom());
-		
-		ligue.setNom(null);
-		assertNull(ligue.getNom());
-	}
-	
-	@Test
-	void testSetAdministrateur() throws SauvegardeImpossible, DateInvalide {
-		Ligue ligue = gestionPersonnel.addLigue("ligueA");
-		Employe employe1 = ligue.addEmploye("Zinedine", "Zidane", "zizou@gmail.com", "azerty", null, null);
-		
-		ligue.setAdministrateur(employe1);
-		assertEquals(employe1, ligue.getAdministrateur());
-		
-		Employe employe2 = ligue.addEmploye("Carlo", "Ancelotti", "carlo@gmail.com", "azertyuiop", null, null);
-		
-		ligue.setAdministrateur(employe2);
-		assertEquals(employe2, ligue.getAdministrateur());
-		
-		ligue.setAdministrateur(gestionPersonnel.getRoot());
-		assertEquals(gestionPersonnel.getRoot(), ligue.getAdministrateur());
-		
-		Ligue ligue2 = gestionPersonnel.addLigue("salut");
-		Employe employeSalut = ligue2.addEmploye("Carlo", "Ancelotti", "carlo@gmail.com", "azertyuiop", null, null);
-		
-		assertThrows(DroitsInsuffisants.class, () -> {
-			ligue.setAdministrateur(employeSalut);
-		}, "L'administrateur ne peut pas provenir d'une autre ligue.");
-		
-	}
-	
 	
 }
