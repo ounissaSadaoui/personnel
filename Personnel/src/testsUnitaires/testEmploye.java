@@ -109,18 +109,46 @@ class testEmploye {
 		//test sur le setteur
 		employe.setDateArrivee(LocalDate.parse("2020-10-10"));
 		assertEquals(LocalDate.parse("2020-10-10"), employe.getDateArrivee());
-		
-		//le setteur marche bien
+	}
+	
+	@Test 
+	void testSetDateArrivee1() throws SauvegardeImpossible, DateInvalide
+	{
+		Ligue ligue = gestionPersonnel.addLigue("Fléches");
+		Employe employe = ligue.addEmploye("Bouchar", "Gérar", "bouchard@gmail.com", "zerty", LocalDate.parse("2024-01-13"), LocalDate.parse("2024-01-14"));
+
 		employe.setDateArrivee(LocalDate.parse("2021-10-10"));
 		assertEquals(LocalDate.parse("2021-10-10"), employe.getDateArrivee());
+	}
+	
+	@Test 
+	//TU date null
+	void testSetDateArriveeDateNull() throws SauvegardeImpossible, DateInvalide
+	{
+		Ligue ligue = gestionPersonnel.addLigue("Fléches");
+		Employe employe = ligue.addEmploye("Bouchar", "Gérar", "bouchard@gmail.com", "zerty", LocalDate.parse("2024-01-13"), LocalDate.parse("2024-01-14"));
 		
 		// on peut mettre une date à null
 		employe.setDateArrivee(null);
 		assertEquals(null, employe.getDateArrivee());
-
+	}
+	
+	@Test 
+	//TU sur la dateArrivee
+	void testSetDateArriveeNonRenseigne() throws SauvegardeImpossible, DateInvalide
+	{
+		Ligue ligue = gestionPersonnel.addLigue("Fléches");
+		Employe employe = ligue.addEmploye("Bouchar", "Gérar", "bouchard@gmail.com", "zerty", LocalDate.parse("2024-01-13"), LocalDate.parse("2024-01-14"));
 		// cas ou la date n'est pas renseignée à la création de l'employe
 		 employe = ligue.addEmploye("Bouchar", "Gérar", "bouchard@gmail.com", "zerty", null, null);
 		 assertEquals(null, employe.getDateArrivee());
+	}
+	
+	@Test 
+	void testSetDateArriveeModificationDateNulll() throws SauvegardeImpossible, DateInvalide
+	{
+		Ligue ligue = gestionPersonnel.addLigue("Fléches");
+		Employe employe = ligue.addEmploye("Bouchar", "Gérar", "bouchard@gmail.com", "zerty", LocalDate.parse("2024-01-13"), LocalDate.parse("2024-01-14"));
 		//on peut bien modifier une date qui était à null
 		 
 		employe.setDateArrivee(LocalDate.parse("2022-01-08"));
@@ -131,21 +159,44 @@ class testEmploye {
 	
 	@Test 
 	// tests sur la date de départ
-	void testSetDateDepart() throws SauvegardeImpossible, DateInvalide
+	void testSetDateDepartNull() throws SauvegardeImpossible, DateInvalide
 	{
 		Ligue ligue = gestionPersonnel.addLigue("Liga");
 		Employe employe = ligue.addEmploye("Vinicius", "Junior", "vini.jr@gmail.com", "azerty", LocalDate.parse("2018-01-13"), null);
 		
 		// Cas #1 - date départ à null
 		assertEquals(null, employe.getDateDepart());
+	}
+	
+	@Test
+	void testSetDateDepartCasNormal() throws SauvegardeImpossible, DateInvalide
+	{
+		Ligue ligue = gestionPersonnel.addLigue("Liga");
+		Employe employe = ligue.addEmploye("Vinicius", "Junior", "vini.jr@gmail.com", "azerty", LocalDate.parse("2018-01-13"), null);
 		
 		//test setteur : cas normal:
 		employe.setDateDepart(LocalDate.parse("2024-04-13"));
+	}
+	
+	@Test
+	void testSetDateDepartAnterieur() throws SauvegardeImpossible, DateInvalide
+	{
+		Ligue ligue = gestionPersonnel.addLigue("Liga");
+		Employe employe = ligue.addEmploye("Vinicius", "Junior", "vini.jr@gmail.com", "azerty", LocalDate.parse("2018-01-13"), null);
+		
 		
 		// tets setteur : cas date depart antérieure à date arrivee
 		 assertThrows(DateInvalide.class, () -> {
 				employe.setDateDepart(LocalDate.parse("2017-04-13"));
 		 }, "La date d'arrivée ne doit pas être sup à celle de départ");
+	}
+	
+	@Test
+	void testSetDateDepartDateArriveeNull() throws SauvegardeImpossible, DateInvalide
+	{
+		Ligue ligue = gestionPersonnel.addLigue("Liga");
+		Employe employe = ligue.addEmploye("Vinicius", "Junior", "vini.jr@gmail.com", "azerty", LocalDate.parse("2018-01-13"), null);
+		
 		 
 		//on essaie de mettre une date de depart, alors qu'il n'y a pas de date d'arrivee
 			
@@ -153,13 +204,27 @@ class testEmploye {
 				employe.setDateArrivee(null);
 				employe.setDateDepart(LocalDate.parse("2014-08-14"));
          }, "Il ne peut y avoir de date de depart sans date d'arrivee");
+	}
+	
+	@Test
+	void testSetDateDepartDateNull() throws SauvegardeImpossible, DateInvalide
+	{
+		Ligue ligue = gestionPersonnel.addLigue("Liga");
+		Employe employe = ligue.addEmploye("Vinicius", "Junior", "vini.jr@gmail.com", "azerty", LocalDate.parse("2018-01-13"), null);
+		
 			 
 			//la dernière date inscrite est bien celle qui est conservée
 		assertEquals(LocalDate.parse("2024-04-13"), employe.getDateDepart());
 			//on remet la date à null
 		employe.setDateDepart(null);
 		assertEquals(null, employe.getDateDepart());
-		
+	}
+	
+	@Test
+	void testSetDateDepart() throws SauvegardeImpossible, DateInvalide
+	{
+		Ligue ligue = gestionPersonnel.addLigue("Liga");
+		Employe employe = ligue.addEmploye("Vinicius", "Junior", "vini.jr@gmail.com", "azerty", LocalDate.parse("2018-01-13"), null);
 		
 		//on essaie une date de depart null et une quelconque date d'arrivee
 		employe.setDateArrivee(LocalDate.parse("2012-12-12"));
