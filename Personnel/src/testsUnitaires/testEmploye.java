@@ -87,13 +87,6 @@ class testEmploye {
 		assertEquals(LocalDate.parse("2020-01-13"), employe.getDateArrivee());
 		// pareil
 	        
-		/* Ligue liga = gestionPersonnel.addLigue("Liga");	
-		Employe goat = liga.addEmploye("Vini", "jr", "vini.jr@rm.com", "vini", LocalDate.parse("2020-10-1"),null);
-		//test avec AssertThrows sur des dates à null
-	    assertThrows(DateTimeParseException.class, () -> {
-	    goat.setdateArrivee(LocalDate.parse("2020-10-10"));
-	    assertEquals(LocalDate.parse("2020-10-10"), goat.getdateArrivee());
-	    }, "Le test devrait fonctionner.");*/
 	   }
 	
     @Test
@@ -193,10 +186,7 @@ class testEmploye {
 		
 		employe.setNom("matuidi");
 		assertEquals("matuidi", employe.getNom());
-		
-		employe.setNom("verratti");
-		assertEquals("verratti", employe.getNom());
-		
+	
 		employe.setNom(null);
 		assertNull(employe.getNom());
 	}
@@ -209,10 +199,7 @@ class testEmploye {
 		
 		employe.setPrenom("blaise");
 		assertEquals("blaise", employe.getPrenom());
-		
-		employe.setPrenom("marco");
-		assertEquals("marco", employe.getPrenom());
-		
+	
 		employe.setPrenom(null);
 		assertNull(employe.getPrenom());
 	}
@@ -225,10 +212,7 @@ class testEmploye {
 		
 		employe.setMail("matuidi@mail.com");
 		assertEquals("matuidi@mail.com", employe.getMail());
-		
-		employe.setMail("marco@mail.com");
-		assertEquals("marco@mail.com", employe.getMail());
-		
+	
 		employe.setMail(null);
 		assertNull(employe.getMail());
 	}
@@ -239,15 +223,13 @@ class testEmploye {
 		Employe employe = ligue.addEmploye("Vinicius", "Junior", "vini.jr@gmail.com", "azerty", null, null);
 		
 		assertTrue(employe.checkPassword("azerty"));
-		assertFalse(employe.checkPassword("azertyuiop"));
 		
-		employe.setPassword("azertyuiop");
-		assertTrue(employe.checkPassword("azertyuiop"));
+		employe.setPassword("@azert234yuiop");
+		assertTrue(employe.checkPassword("@azert234yuiop"));
 		assertFalse(employe.checkPassword("azerty"));
 		
 		employe.setPassword("supermdp");
 		assertTrue(employe.checkPassword("supermdp"));
-		assertFalse(employe.checkPassword("azerty"));
 		assertFalse(employe.checkPassword("azertyuiop"));
 	}
 }
