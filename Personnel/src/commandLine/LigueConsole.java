@@ -98,7 +98,7 @@ public class LigueConsole
 	
 	private Option ajouterEmploye(final Ligue ligue)
 	{
-		return new Option("ajouter un employé", "a",
+		return new Option("Ajouter un employé", "a",
 				() -> 
 				{
 					// 
@@ -120,8 +120,9 @@ public class LigueConsole
 		Menu menu = new Menu("Gérer les employés de " + ligue.getNom(), "e");
 		menu.add(afficherEmployes(ligue));
 		menu.add(ajouterEmploye(ligue));
-		menu.add(modifierEmploye(ligue));
-		menu.add(supprimerEmploye(ligue));
+		//menu.add(modifierEmploye(ligue));
+		//menu.add(supprimerEmploye(ligue));
+		menu.add(selectionnerEmploye(ligue));
 		menu.addBack("q");
 		return menu;
 	}
@@ -152,4 +153,14 @@ public class LigueConsole
 		return new Option("Supprimer", "d", () -> {ligue.remove();});
 	}
 	
+	//Ajout de la méthode de sélection d'un employe avant sa modification 
+	private Menu selectionnerEmploye(Ligue ligue)
+	{
+		Menu menu = new Menu("Sélectionner un employé de  " + ligue.getNom(), "s");
+		menu.add(modifierEmploye(ligue));
+		menu.add(supprimerEmploye(ligue));
+		menu.addBack("q");
+		return menu;
+	}
+
 }
