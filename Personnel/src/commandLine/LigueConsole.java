@@ -2,6 +2,7 @@ package commandLine;
 
 import static commandLineMenus.rendering.examples.util.InOut.getString;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import commandLineMenus.List;
@@ -99,7 +100,9 @@ public class LigueConsole
 							getString("nom : "), 
 							getString("prenom : "), 
 							getString("mail : "), 
-							getString("password : "), null, null);
+							getString("password : "),
+							LocalDate.now(), 
+							LocalDate.now());
 					} catch (DateInvalide e) {
 						e.printStackTrace();
 					}
@@ -118,16 +121,7 @@ public class LigueConsole
 		menu.addBack("q");
 		return menu;
 	}
-	
-/*original pour remove 
-	private List<Employe> supprimerEmploye(final Ligue ligue)
-	{
-		
-		return new List<>("Supprimer un employé", "s", 
-				() -> new ArrayList<>(ligue.getEmployes()),
-				(index, element) -> {element.remove();}
-				);
-	}*/
+
 	private Option supprimerEmploye (final Employe employe)
 	{
 		return new Option ("Supprimer ", "x",
@@ -142,44 +136,13 @@ public class LigueConsole
 });
 	
 	}		
-/*
-	private List<Employe> modifierEmploye(final Ligue ligue)
-	{
-		return new List<>("Modifier un employé", "e", 
-				() -> new ArrayList<>(ligue.getEmployes()),
-				employeConsole.editerEmploye()
-				);
-	}*/
-	/* originale, pour modifier, */
-/*
-	private Option modifierEmploye(final Employe employe)
-	{
-		return new List<>("Modifier un employé", "e", 
-				() -> new ArrayList<>( ),
-				employeConsole.editerEmploye()
-				);
-	}
-	private Option modifierEmploye(final Employe employe)
-	{
-		return new Option ("Modifier l'employé ", "m", () -> 	employeConsole.editerEmploye(employe)
-				);
-	}*/
+
 	
 	private Option supprimer(Ligue ligue)
 	{
 		return new Option("Supprimer", "d", () -> {ligue.remove();});
 	}
-	
-	//Ajout de la méthode de sélection d'un employe avant sa modification 
-	/*private Menu selectionnerEmploye(Ligue ligue)
-	{
-		Menu menu = new Menu("Sélectionner un employé de  " + ligue.getNom(), "s");
-	//	menu.add(modifierEmploye(ligue));
-	//	menu.add(supprimerEmploye(ligue));
-		menu.add(editerEmploye(ligue));
-		menu.addBack("q");
-		return menu;
-	}*/
+
 	private List<Employe> selectionnerEmploye(Ligue ligue)
 	{
 		return new List<Employe>("Sélectionner un Employe", "g", 
@@ -202,7 +165,6 @@ public class LigueConsole
 		menu.add(changerAdministrateur(ligue, employe));
 		menu.add(supprimerEmploye(employe));
 		//menu.add(supprimerEmploye(ligue));
-
 		//menu.add(changerAdministrateur(ligue));
 		menu.addBack("q");
 		return menu;

@@ -30,8 +30,8 @@ public class EmployeConsole
 			menu.add(changerPrenom(employe));
 			menu.add(changerMail(employe));
 			menu.add(changerPassword(employe));
-			//menu.add(ajouterDateArrivee(employe));
-			//menu.add(ajouterDateDepart(employe));
+			menu.add(ajouterDateArrivee(employe));
+			menu.add(ajouterDateDepart(employe));
 			menu.addBack("q");
 			return menu;
 	}
@@ -57,8 +57,8 @@ public class EmployeConsole
 	{
 		return new Option("Changer le password", "x", () -> {employe.setPassword(getString("Nouveau password : "));});
 	}
-	/*
-	 * private Option ajouterDateDepart(final Employe employe)
+	
+	 private Option ajouterDateDepart(final Employe employe)
 	{
 		return new Option ("Ajouter une date de départ", "d", () -> {String dateString = getString("Date de départ :");
 	    LocalDate dateDepart = LocalDate.parse(dateString); 
@@ -83,7 +83,6 @@ public class EmployeConsole
 			e.printStackTrace();
 		}});
 	}
-	 */
 
 
 }
