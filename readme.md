@@ -19,7 +19,7 @@ BTS SIO SLAM2
 1. <a href="#"> Introduction </a>
 
 ___
-Bienvenue dans la page de documentation de notre Porjet  
+Bienvenue dans la page de documentation de notre Projet  
 
 <h1> 
 <p align="center">
