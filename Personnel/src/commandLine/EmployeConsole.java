@@ -8,6 +8,7 @@ import commandLineMenus.Option;
 import personnel.DateInvalide;
 import personnel.Employe;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class EmployeConsole 
@@ -30,7 +31,7 @@ public class EmployeConsole
 			menu.add(changerPrenom(employe));
 			menu.add(changerMail(employe));
 			menu.add(changerPassword(employe));
-			menu.add(ajouterDateArrivee(employe));
+		    menu.add(ajouterDateArrivee(employe));
 			menu.add(ajouterDateDepart(employe));
 			menu.addBack("q");
 			return menu;
@@ -58,31 +59,43 @@ public class EmployeConsole
 		return new Option("Changer le password", "x", () -> {employe.setPassword(getString("Nouveau password : "));});
 	}
 	
-	 private Option ajouterDateDepart(final Employe employe)
-	{
-		return new Option ("Ajouter une date de départ", "d", () -> {String dateString = getString("Date de départ :");
-	    LocalDate dateDepart = LocalDate.parse(dateString); 
-	    try {
-			employe.setDateDepart(dateDepart);
-		} catch (DateTimeParseException e) {
-			System.out.print("la date doit être au format 'AAAA-MM-JJ'");
-			e.printStackTrace();
-		} catch (DateInvalide e) {
-			System.out.print("Date Invalide");
-			e.printStackTrace();
-		}});
-	}
-	private Option ajouterDateArrivee(final Employe employe)
-	{
-		return new Option ("Ajouter une date d'arrivée", "a", () -> {String dateString = getString("Date d'arrivée :");
-	    LocalDate dateArrivee = LocalDate.parse(dateString); 
-	    try {
-			employe.setDateArrivee(dateArrivee);
-		} catch (DateInvalide e) {
-			System.out.print("la date doit être au format 'AAAA-MM-JJ'");
-			e.printStackTrace();
-		}});
-	}
+	 private Option ajouterDateDepart(final Employe employe) {
+	     return new Option("Ajouter une date de départ", "d", () -> {
+	         boolean saisieValide = false;
 
+	         do {
+	             try {
+	                 String dateString = getString("Date de départ :");
+	                 LocalDate dateDepart = LocalDate.parse(dateString);
+
+	                 employe.setDateDepart(dateDepart);
+	                 saisieValide = true; 
+	             } catch (DateTimeParseException e) {
+	                 System.out.println("La date doit être au format 'AAAA-MM-JJ'. Veuillez réessayer.");
+	             } catch (DateInvalide e) {
+	                 System.out.println("Date invalide. Veuillez réessayer.");
+	             }
+	         } while (!saisieValide);
+	     });
+	 }
+	 private Option ajouterDateArrivee(final Employe employe) {
+	     return new Option("Ajouter une date d'arrivée", "a", () -> {
+	         boolean saisieValide = false;
+
+	         do {
+	             try {
+	                 String dateString = getString("Date d'arrivée :");
+	                 LocalDate dateDepart = LocalDate.parse(dateString);
+
+	                 employe.setDateArrivee(dateDepart);
+	                 saisieValide = true; 
+	             } catch (DateTimeParseException e) {
+	                 System.out.println("La date doit être au format 'AAAA-MM-JJ'. Veuillez réessayer.");
+	             } catch (DateInvalide e) {
+	                 System.out.println("Date invalide. Veuillez réessayer.");
+	             }
+	         } while (!saisieValide);
+	     });
+	 }
 
 }

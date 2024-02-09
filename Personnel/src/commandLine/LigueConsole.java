@@ -97,12 +97,13 @@ public class LigueConsole
 					// 
 					try {
 						ligue.addEmploye(
-							getString("nom : "), 
-							getString("prenom : "), 
-							getString("mail : "), 
-							getString("password : "),
-							LocalDate.now(), 
-							LocalDate.now());
+							getString("Nom : "), 
+							getString("Prenom : "), 
+							getString("Mail : "), 
+							getString("Password : "),
+							LocalDate.parse(getString("Date d'arrivée  au format AAAA-MM-JJ: ")), 	
+							//LocalDate.parse(getString("Date de départ AAAA-MM-JJ: ")));
+							null);
 					} catch (DateInvalide e) {
 						e.printStackTrace();
 					}
