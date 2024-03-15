@@ -40,7 +40,12 @@ public class JDBC implements Passerelle
 			Statement instruction = connection.createStatement();
 			ResultSet ligues = instruction.executeQuery(requete);
 			while (ligues.next())
-				gestionPersonnel.addLigue(ligues.getInt(1), ligues.getString(2));
+				try {
+					gestionPersonnel.addLigue(ligues.getInt(1), ligues.getString(2));
+				} catch (SauvegardeImpossible e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
 		catch (SQLException e)
 		{
