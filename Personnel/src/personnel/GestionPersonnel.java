@@ -31,10 +31,11 @@ public class GestionPersonnel implements Serializable
 	 * Retourne l'unique instance de cette classe.
 	 * Crée cet objet s'il n'existe déjà.
 	 * @return l'unique objet de type {@link GestionPersonnel}.
+	 * @throws SauvegardeImpossible 
 	 * @throws DateInvalide 
 	 */
 	
-	public static GestionPersonnel getGestionPersonnel()
+	public static GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible
 	{
 		if (gestionPersonnel == null)
 		{
@@ -45,7 +46,7 @@ public class GestionPersonnel implements Serializable
 		return gestionPersonnel;
 	}
 
-	public GestionPersonnel()
+	public GestionPersonnel() throws SauvegardeImpossible
 	{
 		if (gestionPersonnel != null) {
 			throw new RuntimeException("Vous ne pouvez créer qu'une seule instance de cet objet.");
@@ -115,6 +116,13 @@ public class GestionPersonnel implements Serializable
 	int insert(Ligue ligue) throws SauvegardeImpossible
 	{
 		return passerelle.insert(ligue);
+	}
+	/**
+	 * Transmet l'ordre d'ajout d'un employé à la passerelle
+	 */
+	int insert(Employe employe) throws SauvegardeImpossible
+	{
+		return passerelle.insert(employe);
 	}
 
 	/**

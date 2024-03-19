@@ -3,6 +3,8 @@ package personnel;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.*;
+import java.util.TreeSet;
+
 import personnel.DateInvalide;
 
 /**
@@ -21,6 +23,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	private LocalDate dateArrivee , dateDepart;
 	private Ligue ligue;
 	private GestionPersonnel gestionPersonnel;
+	private int id = -1;
 	
 	Employe(GestionPersonnel gestionPersonnel, 
 			Ligue ligue, 
@@ -29,7 +32,7 @@ public class Employe implements Serializable, Comparable<Employe>
 			String mail, 
 			String password, 
 			LocalDate dateArrivee, 
-			LocalDate dateDepart) throws DateInvalide
+			LocalDate dateDepart) throws DateInvalide, SauvegardeImpossible
 {
 		this.gestionPersonnel = gestionPersonnel;
 		this.nom = nom;
@@ -40,9 +43,16 @@ public class Employe implements Serializable, Comparable<Employe>
 		// on passe par les setter pour pouvoir valider les dates
 		setDateArrivee(dateArrivee);
 		setDateDepart(dateDepart);
+		this.id = gestionPersonnel.insert(this); 
+
 		
     }
-
+	Employe(GestionPersonnel gestionPersonnel, int id, Ligue ligue,String nom, String prenom, String password, String mail,  LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible
+	{
+		this.setNom(nom);
+		this.gestionPersonnel = gestionPersonnel;
+		this.id = id;
+	}
 	
 	/**
 	 * Retourne vrai ssi l'employé est administrateur de la ligue 
@@ -52,6 +62,8 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * @param ligue la ligue pour laquelle on souhaite vérifier si this 
 	 * est l'admininstrateur.
 	 */
+	
+	
 	
 	public boolean estAdmin(Ligue ligue)
 	{
@@ -217,6 +229,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * récupère les droits d'administration sur sa ligue.
 	 */
 	
+
 	public void remove()
 	{
 		Employe root = gestionPersonnel.getRoot();

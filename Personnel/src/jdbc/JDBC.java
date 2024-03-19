@@ -31,7 +31,7 @@ public class JDBC implements Passerelle
 	}
 	
 	@Override
-	public GestionPersonnel getGestionPersonnel() 
+	public GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible 
 	{
 		GestionPersonnel gestionPersonnel = new GestionPersonnel();
 		try 
@@ -92,4 +92,32 @@ public class JDBC implements Passerelle
 			throw new SauvegardeImpossible(exception);
 		}		
 	}
+
+	@Override
+	public int insert(Employe employe) throws SauvegardeImpossible {
+	    try {
+	        //On véridie d'abird si l'employé existe déjà
+	        PreparedStatement checkIfExists = connection.prepareStatement("SELECT COUNT(*) FROM employe WHERE nom = ?");
+	        checkIfExists.setString(1, employe.getNom());
+	        ResultSet result = checkIfExists.executeQuery();
+	        result.next();
+	        int rowCount = result.getInt(1);
+	        if (rowCount > 0) {
+	          System.out.println("Un super utilisateur existe déjà");
+	        }
+	        
+	        // Si l'employé n'existe pas, on insère les données
+	        PreparedStatement instruction;
+	        instruction = connection.prepareStatement("INSERT INTO employe (nom) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+	        instruction.setString(1, employe.getNom());
+	        instruction.executeUpdate();
+	        ResultSet id = instruction.getGeneratedKeys();
+	        id.next();
+	        return id.getInt(1);
+	    } catch (SQLException exception) {
+	        exception.printStackTrace();
+	        throw new SauvegardeImpossible(exception);
+	    }
+	}
+
 }

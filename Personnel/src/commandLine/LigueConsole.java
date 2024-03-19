@@ -106,6 +106,9 @@ public class LigueConsole
 							null);
 					} catch (DateInvalide e) {
 						e.printStackTrace();
+					} catch (SauvegardeImpossible e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 		);
