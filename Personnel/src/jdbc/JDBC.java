@@ -103,7 +103,6 @@ public class JDBC implements Passerelle
 	        result.next();
 	        int rowCount = result.getInt(1);
 	        if (rowCount > 0) {
-	          System.out.println("Un super utilisateur existe déjà");
 	        }
 	        
 	        // Si l'employé n'existe pas, on insère les données
