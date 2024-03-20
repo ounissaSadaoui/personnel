@@ -18,8 +18,8 @@ public class Ligue implements Serializable, Comparable<Ligue>
 {
 	
 	private static final long serialVersionUID = 1L;
-	private int id = -1;
 	private String nom;
+	private int id =-1;
 	private SortedSet<Employe> employes;
 	private Employe administrateur;
 	private GestionPersonnel gestionPersonnel;

@@ -1,9 +1,22 @@
 package personnel;
 
 import java.io.Serializable;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import jdbc.Credentials;
+
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Gestion du personnel. Un seul objet de cette classe existe.
@@ -20,7 +33,9 @@ public class GestionPersonnel implements Serializable
 	private static final long serialVersionUID = -105283113987886425L;
 	private static GestionPersonnel gestionPersonnel = null;
 	private SortedSet<Ligue> ligues;
-	private Employe root;
+	private SortedSet<Employe> employes;
+	//cchngé à public aussi tension :
+	public Employe root  ; 
 	public final static int SERIALIZATION = 1, JDBC = 2,
 			TYPE_PASSERELLE = JDBC;   
 	
@@ -35,7 +50,7 @@ public class GestionPersonnel implements Serializable
 	 * @throws DateInvalide 
 	 */
 	
-	public static GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible
+	public static GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible, DateInvalide
 	{
 		if (gestionPersonnel == null)
 		{
@@ -51,11 +66,11 @@ public class GestionPersonnel implements Serializable
 		if (gestionPersonnel != null) {
 			throw new RuntimeException("Vous ne pouvez créer qu'une seule instance de cet objet.");
 		}
-		try {
+		/*try {
 			root = new Employe(this, null, "root", "", "", "toor", null, null);
 		} catch (DateInvalide e) {
 			// On ne fait rien car on sait qu'il ne peut rien se passer ici, la creation de root est forcément valide
-		}
+		}*/
 		ligues = new TreeSet<>();
 		gestionPersonnel = this;
 	}
@@ -92,6 +107,13 @@ public class GestionPersonnel implements Serializable
 	public SortedSet<Ligue> getLigues()
 	{
 		return Collections.unmodifiableSortedSet(ligues);
+	}
+	
+	//ajout de ça pour match la sortedlIST LIGUE
+	
+	public SortedSet<Employe> getEmployes()
+	{
+		return Collections.unmodifiableSortedSet(employes);
 	}
 
 	public Ligue addLigue(String nom) throws SauvegardeImpossible
@@ -134,4 +156,34 @@ public class GestionPersonnel implements Serializable
 	{
 		return root;
 	}
+	
+	public void addRoot() throws SauvegardeImpossible {
+        try {
+            // Utiliser la connexion définie dans JDBC
+            Connection connection = new jdbc.JDBC().connection;
+            
+            // Requête SQL pour sélectionner les informations du root depuis la base de données
+            String requete = "SELECT * FROM employe WHERE nom = 'root'";
+            PreparedStatement instruction = connection.prepareStatement(requete);
+            ResultSet resultSet = instruction.executeQuery();
+
+            if (resultSet.next()) {
+                String nom = resultSet.getString("nom");
+                String password = resultSet.getString("password");
+                
+                // Créer une nouvelle instance d'employé pour le root
+                Employe root = new Employe(this, -1, null, nom, "", password, "", null, null);
+                
+                // Affecter le root à la variable d'instance root de la classe GestionPersonnel
+                this.root = root;
+            } else {
+            	return ;
+            }
+            resultSet.close();
+            instruction.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SauvegardeImpossible(e);
+        }
+    }
 }

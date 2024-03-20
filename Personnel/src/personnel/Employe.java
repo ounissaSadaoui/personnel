@@ -1,8 +1,11 @@
 package personnel;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.*;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import personnel.DateInvalide;
@@ -23,9 +26,14 @@ public class Employe implements Serializable, Comparable<Employe>
 	private LocalDate dateArrivee , dateDepart;
 	private Ligue ligue;
 	private GestionPersonnel gestionPersonnel;
-	private int id = -1;
+	//ajout de la var d'instance id
+	private int id;
+	//ajout des var pour surcharge su constructeur
+	private SortedSet<Employe> employes;
+	private Employe administrateur;
 	
-	Employe(GestionPersonnel gestionPersonnel, 
+	//attention you changed it to public!!!
+	public Employe(GestionPersonnel gestionPersonnel, 
 			Ligue ligue, 
 			String nom, 
 			String prenom, 
@@ -47,13 +55,13 @@ public class Employe implements Serializable, Comparable<Employe>
 
 		
     }
-	Employe(GestionPersonnel gestionPersonnel, int id, Ligue ligue,String nom, String prenom, String password, String mail,  LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible
+	public Employe(GestionPersonnel gestionPersonnel, int id, Ligue ligue,String nom, String prenom, String password, String mail,  LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible
 	{
 		this.setNom(nom);
+		this.setPassword(password);
 		this.gestionPersonnel = gestionPersonnel;
 		this.id = id;
 	}
-	
 	/**
 	 * Retourne vrai ssi l'employé est administrateur de la ligue 
 	 * passée en paramètre.
@@ -214,6 +222,22 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.password= password;
 	}
 
+	public String getPassword()
+	{
+		return password;
+	}
+	
+	//get set pour id 
+	
+	public void setId (int id)
+	{
+		this.id = id;
+	}
+	
+	public int getId ()
+	{
+		return id;
+	}
 	/**
 	 * Retourne la ligue à laquelle l'employé est affecté.
 	 * @return la ligue à laquelle l'employé est affecté.

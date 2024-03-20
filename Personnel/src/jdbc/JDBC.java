@@ -6,12 +6,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 
 import personnel.*;
 
 public class JDBC implements Passerelle 
 {
-	Connection connection;
+	public Connection connection;
 
 	public JDBC()
 	{
@@ -31,6 +32,55 @@ public class JDBC implements Passerelle
 	}
 	
 	@Override
+	public GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible {
+	    GestionPersonnel gestionPersonnel = new GestionPersonnel();
+	    try {
+	        // Requête SQL pour sélectionner les informations du root depuis la base de données
+	        String requete = "SELECT * FROM employe WHERE nom = 'root'";
+	        PreparedStatement instruction = connection.prepareStatement(requete);
+	        ResultSet resultSet = instruction.executeQuery();
+
+	        if (resultSet.next()) {
+	            String nom = resultSet.getString("nom");
+	            String password = resultSet.getString("password");
+
+	            // création de l'instance d'employé pour le root
+	            Employe root = new Employe(gestionPersonnel, -1, null, nom, "", password, "", null, null);
+
+	            // Affecter le root à la variable d'instance root de la classe GestionPersonnel
+	            gestionPersonnel.root = root;
+	        } else {
+	            // cas ou le root n'existe pas en bididi, on le créé
+	            String requeteInsert = "INSERT INTO employe (nom, password) VALUES ('root', 'toor')";
+	            PreparedStatement instructionInsert = connection.prepareStatement(requeteInsert);
+	            instructionInsert.executeUpdate();
+	            instructionInsert.close();
+
+	            // Ensuite, on le lit
+	            resultSet = instruction.executeQuery();
+	            if (resultSet.next()) {
+	                String nom = resultSet.getString("nom");
+	                String password = resultSet.getString("password");
+
+	                Employe root = new Employe(gestionPersonnel, -1, null, nom, "", password, "", null, null);
+
+	                // Affecter le root à la variable d'instance root de la classe GestionPersonnel
+	                gestionPersonnel.root = root;
+	            } else {
+	                throw new SauvegardeImpossible(new RuntimeException("Sauvegarde Impossible !!"));
+	            }
+	        }
+
+	        resultSet.close();
+	        instruction.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw new SauvegardeImpossible(e);
+	    }
+	    return gestionPersonnel;
+	}
+/*
+	
 	public GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible 
 	{
 		GestionPersonnel gestionPersonnel = new GestionPersonnel();
@@ -52,8 +102,8 @@ public class JDBC implements Passerelle
 			System.out.println(e);
 		}
 		return gestionPersonnel;
-	}
-
+	}*/
+	
 	@Override
 	public void sauvegarderGestionPersonnel(GestionPersonnel gestionPersonnel) throws SauvegardeImpossible 
 	{
@@ -107,8 +157,9 @@ public class JDBC implements Passerelle
 	        
 	        // Si l'employé n'existe pas, on insère les données
 	        PreparedStatement instruction;
-	        instruction = connection.prepareStatement("INSERT INTO employe (nom) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+            instruction = connection.prepareStatement("INSERT INTO employe (nom, password) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
 	        instruction.setString(1, employe.getNom());
+	        instruction.setString(2, employe.getPassword());
 	        instruction.executeUpdate();
 	        ResultSet id = instruction.getGeneratedKeys();
 	        id.next();
