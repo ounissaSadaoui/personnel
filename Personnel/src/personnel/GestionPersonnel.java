@@ -129,6 +129,12 @@ public class GestionPersonnel implements Serializable
 		ligues.add(ligue);
 		return ligue;
 	}
+	/*public Employe addRoot (int id , String nom,  Ligue ligue, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart)  throws SauvegardeImpossible, DateInvalide
+	{
+		Employe root = new Employe (this, id, null, nom, prenom ,null, password, null, null);
+		employes.add(root);
+		return root; 
+	}*/
 
 	void remove(Ligue ligue)
 	{
@@ -157,33 +163,16 @@ public class GestionPersonnel implements Serializable
 		return root;
 	}
 	
+	//addRoot sue le modèle de addLigue
 	public void addRoot() throws SauvegardeImpossible {
-        try {
-            // Utiliser la connexion définie dans JDBC
-            Connection connection = new jdbc.JDBC().connection;
+       
+		root.setId(1);
+		root = passerelle.getRoot(root);
             
-            // Requête SQL pour sélectionner les informations du root depuis la base de données
-            String requete = "SELECT * FROM employe WHERE nom = 'root'";
-            PreparedStatement instruction = connection.prepareStatement(requete);
-            ResultSet resultSet = instruction.executeQuery();
-
-            if (resultSet.next()) {
-                String nom = resultSet.getString("nom");
-                String password = resultSet.getString("password");
-                
-                // Créer une nouvelle instance d'employé pour le root
-                Employe root = new Employe(this, -1, null, nom, "", password, "", null, null);
-                
-                // Affecter le root à la variable d'instance root de la classe GestionPersonnel
-                this.root = root;
-            } else {
-            	return ;
-            }
-            resultSet.close();
-            instruction.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new SauvegardeImpossible(e);
-        }
     }
+	//ajout de addRoot ici pouir qu'on n'ait pas à appeler new employe depuis le jdbc
+	
+	public void addRoot(int id, String nom, String password, String mail, LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible, DateInvalide {
+	    root = new Employe(this, id, null, nom, "", password, mail, dateArrivee, dateDepart);
+	}
 }

@@ -32,59 +32,10 @@ public class JDBC implements Passerelle
 	}
 	
 	@Override
-	public GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible {
+	/*
+	public GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible , DateInvalide{
 	    GestionPersonnel gestionPersonnel = new GestionPersonnel();
-	    try {
-	        // Requête SQL pour sélectionner les informations du root depuis la base de données
-	        String requete = "SELECT * FROM employe WHERE nom = 'root'";
-	        PreparedStatement instruction = connection.prepareStatement(requete);
-	        ResultSet resultSet = instruction.executeQuery();
-
-	        if (resultSet.next()) {
-	            String nom = resultSet.getString("nom");
-	            String password = resultSet.getString("password");
-
-	            // création de l'instance d'employé pour le root
-	            Employe root = new Employe(gestionPersonnel, -1, null, nom, "", password, "", null, null);
-
-	            // Affecter le root à la variable d'instance root de la classe GestionPersonnel
-	            gestionPersonnel.root = root;
-	        } else {
-	            // cas ou le root n'existe pas en bididi, on le créé
-	            String requeteInsert = "INSERT INTO employe (nom, password) VALUES ('root', 'toor')";
-	            PreparedStatement instructionInsert = connection.prepareStatement(requeteInsert);
-	            instructionInsert.executeUpdate();
-	            instructionInsert.close();
-
-	            // Ensuite, on le lit
-	            resultSet = instruction.executeQuery();
-	            if (resultSet.next()) {
-	                String nom = resultSet.getString("nom");
-	                String password = resultSet.getString("password");
-
-	                Employe root = new Employe(gestionPersonnel, -1, null, nom, "", password, "", null, null);
-
-	                // Affecter le root à la variable d'instance root de la classe GestionPersonnel
-	                gestionPersonnel.root = root;
-	            } else {
-	                throw new SauvegardeImpossible(new RuntimeException("Sauvegarde Impossible !!"));
-	            }
-	        }
-
-	        resultSet.close();
-	        instruction.close();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        throw new SauvegardeImpossible(e);
-	    }
-	    return gestionPersonnel;
-	}
-/*
-	
-	public GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible 
-	{
-		GestionPersonnel gestionPersonnel = new GestionPersonnel();
-		try 
+	    try 
 		{
 			String requete = "select * from ligue";
 			Statement instruction = connection.createStatement();
@@ -101,8 +52,83 @@ public class JDBC implements Passerelle
 		{
 			System.out.println(e);
 		}
-		return gestionPersonnel;
+	    try {
+	        // Requête SQL pour sélectionner les informations du root depuis la base de données
+	        String requete = "SELECT * FROM employe WHERE idLigue IS NULL";
+
+	        PreparedStatement instruction = connection.prepareStatement(requete);
+	        ResultSet resultSet = instruction.executeQuery();
+
+	        // Vérifier si un utilisateur root existe déjà dans la base de données
+	        if (resultSet.next()) {
+	            // Si un utilisateur root existe, récupérer ses informations
+	            int id = resultSet.getInt("idEmploye");
+	            String nom = resultSet.getString("nom");
+	            String password = resultSet.getString("password");
+	            String mail = resultSet.getString("mail");
+	            LocalDate dateArrivee = resultSet.getDate("dateArrivee") != null ? resultSet.getDate("dateArrivee").toLocalDate() : null;
+	            LocalDate dateDepart = resultSet.getDate("dateDepart") != null ? resultSet.getDate("dateDepart").toLocalDate() : null;
+
+	            // Créer un nouvel objet Employe pour le root
+	            gestionPersonnel.addRoot(id, nom, password, mail, dateArrivee, dateDepart);
+	            // Affecter le root à la variable d'instance root de la classe GestionPersonnel
+	        }
+
+	        resultSet.close();
+	        instruction.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw new SauvegardeImpossible(e);
+	    }
+	    return gestionPersonnel;
 	}*/
+	public GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible, DateInvalide {
+	    GestionPersonnel gestionPersonnel = new GestionPersonnel();
+	    try {
+	        // Charger les informations sur le root depuis la base de données
+	        String requeteRoot = "SELECT * FROM employe WHERE idLigue IS NULL";
+	        PreparedStatement instructionRoot = connection.prepareStatement(requeteRoot);
+	        ResultSet resultSetRoot = instructionRoot.executeQuery();
+
+	        // Vérifier si un utilisateur root existe déjà dans la base de données
+	        if (resultSetRoot.next()) {
+	            // Si un utilisateur root existe, récupérer ses informations
+	            int idRoot = resultSetRoot.getInt("idEmploye");
+	            String nomRoot = resultSetRoot.getString("nom");
+	            String passwordRoot = resultSetRoot.getString("password");
+	            String mailRoot = resultSetRoot.getString("mail");
+	            LocalDate dateArriveeRoot = resultSetRoot.getDate("dateArrivee") != null ? resultSetRoot.getDate("dateArrivee").toLocalDate() : null;
+	            LocalDate dateDepartRoot = resultSetRoot.getDate("dateDepart") != null ? resultSetRoot.getDate("dateDepart").toLocalDate() : null;
+
+	            // Utiliser la méthode addRoot pour créer le root
+	            gestionPersonnel.addRoot(idRoot, nomRoot, passwordRoot, mailRoot, dateArriveeRoot, dateDepartRoot);
+	        }
+	        
+
+	        resultSetRoot.close();
+	        instructionRoot.close();
+
+	        // Charger les informations sur les ligues depuis la base de données
+	        String requeteLigues = "SELECT * FROM ligue";
+	        Statement instructionLigues = connection.createStatement();
+	        ResultSet resultSetLigues = instructionLigues.executeQuery(requeteLigues);
+
+	        // Parcourir les résultats et ajouter les ligues à l'objet GestionPersonnel
+	        while (resultSetLigues.next()) {
+	            int idLigue = resultSetLigues.getInt("idLigue");
+	            String nomLigue = resultSetLigues.getString("nom");
+	            gestionPersonnel.addLigue(idLigue, nomLigue);
+	        }
+
+	        resultSetLigues.close();
+	        instructionLigues.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw new SauvegardeImpossible(e);
+	    }
+	    return gestionPersonnel;
+	}
+
 	
 	@Override
 	public void sauvegarderGestionPersonnel(GestionPersonnel gestionPersonnel) throws SauvegardeImpossible 
@@ -122,7 +148,7 @@ public class JDBC implements Passerelle
 			throw new SauvegardeImpossible(e);
 		}
 	}
-	
+	//insertion des ligues 
 	@Override
 	public int insert(Ligue ligue) throws SauvegardeImpossible 
 	{
@@ -169,5 +195,12 @@ public class JDBC implements Passerelle
 	        throw new SauvegardeImpossible(exception);
 	    }
 	}
+
+	@Override
+	public Employe getRoot(Employe root) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 
 }

@@ -56,6 +56,12 @@ public class Serialization implements personnel.Passerelle
 	public int insert(Employe employe) throws SauvegardeImpossible {
 		return 0;
 	}
+
+	@Override
+	public Employe getRoot(Employe root) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 }

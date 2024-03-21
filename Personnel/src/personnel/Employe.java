@@ -33,7 +33,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	private Employe administrateur;
 	
 	//attention you changed it to public!!!
-	public Employe(GestionPersonnel gestionPersonnel, 
+	Employe(GestionPersonnel gestionPersonnel, 
 			Ligue ligue, 
 			String nom, 
 			String prenom, 
