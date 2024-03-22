@@ -129,13 +129,23 @@ public class LigueConsole
 	private Option supprimerEmploye (final Employe employe)
 	{
 		return new Option ("Supprimer ", "x",
-				() -> {employe.remove();});
+				() -> {try {
+					employe.remove();
+				} catch (SauvegardeImpossible e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}});
 	}
 	
 	private Option changerAdministrateur(final Ligue ligue, final Employe employe)
 	{
 			 return new Option("Mettre en Administrateur", "a", () -> 
-						 {ligue.setAdministrateur(employe);
+						 {try {
+							ligue.setAdministrateur(employe);
+						} catch (SauvegardeImpossible e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						 System.out.println(employe.getNom() + " est maintentant Administrateur de: " + ligue);
 });
 	

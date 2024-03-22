@@ -165,6 +165,20 @@ public class JDBC implements Passerelle
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
+	@Override
+	public void updateLigue(Ligue ligue) throws SauvegardeImpossible {
+		try {
+			PreparedStatement instruction;
+			instruction = connection.prepareStatement("UPDATE ligue SET nom = ? WHERE idLigue = ?");
+			instruction.setString(1, ligue.getNom());
+			instruction.setInt(2, ligue.getId());
+			instruction.executeUpdate();
+
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+			throw new SauvegardeImpossible(exception);
+		}
+	}
 
 }

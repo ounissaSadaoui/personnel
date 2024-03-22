@@ -35,9 +35,9 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		this.id = gestionPersonnel.insert(this); 
 	}
 
-	Ligue(GestionPersonnel gestionPersonnel, int id, String nom) throws SauvegardeImpossible
-	{
-		this.setNom(nom);
+
+	Ligue(GestionPersonnel gestionPersonnel, int id, String nom) {
+		this.nom = nom;
 		employes = new TreeSet<>();
 		this.gestionPersonnel = gestionPersonnel;
 		administrateur = gestionPersonnel.getRoot();
@@ -64,6 +64,7 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	        throw new SauvegardeImpossible(new RuntimeException("SauvegardeImpossible"));
 	    }
 	    this.nom = nom;
+		gestionPersonnel.updateLigue(this);
 	}
 
 	/**
@@ -82,15 +83,17 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	 * un employé de la ligue ou le root. Révoque les droits de l'ancien 
 	 * administrateur.
 	 * @param administrateur le nouvel administrateur de la ligue.
+	 * @throws SauvegardeImpossible 
 	 */
 	
-	public void setAdministrateur(Employe administrateur)
+	public void setAdministrateur(Employe administrateur) throws SauvegardeImpossible
 	{
 		Employe root = gestionPersonnel.getRoot();
 		if (administrateur != root && administrateur.getLigue() != this)
 			throw new DroitsInsuffisants();
 		this.administrateur = administrateur;
-	}
+        gestionPersonnel.updateLigue(this);
+}
 
 	/**
 	 * Retourne les employés de la ligue.
@@ -147,5 +150,10 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	public String toString()
 	{
 		return nom;
+	}
+
+	public int getId() {
+		// TODO Auto-generated method stub
+		return id;
 	}
 }

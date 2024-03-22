@@ -50,27 +50,22 @@ public class GestionPersonnel implements Serializable
 	 * @throws DateInvalide 
 	 */
 	
-	public static GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible, DateInvalide
-	{
-		if (gestionPersonnel == null)
-		{
-			gestionPersonnel = passerelle.getGestionPersonnel();
+	public static GestionPersonnel getGestionPersonnel() throws DateInvalide {
+		if (gestionPersonnel == null) {
+			try {
+				gestionPersonnel = passerelle.getGestionPersonnel();
+			} catch (SauvegardeImpossible e) {
+				e.printStackTrace();
+			}
 			if (gestionPersonnel == null)
 				gestionPersonnel = new GestionPersonnel();
 		}
 		return gestionPersonnel;
 	}
 
-	public GestionPersonnel() throws SauvegardeImpossible
-	{
-		if (gestionPersonnel != null) {
-			throw new RuntimeException("Vous ne pouvez créer qu'une seule instance de cet objet.");
-		}
-		/*try {
-			root = new Employe(this, null, "root", "", "", "toor", null, null);
-		} catch (DateInvalide e) {
-			// On ne fait rien car on sait qu'il ne peut rien se passer ici, la creation de root est forcément valide
-		}*/
+	public GestionPersonnel() {
+		if (gestionPersonnel != null)
+			throw new RuntimeException("Vous ne pouvez créer qu'une seuls instance de cet objet.");
 		ligues = new TreeSet<>();
 		gestionPersonnel = this;
 	}
@@ -144,6 +139,12 @@ public class GestionPersonnel implements Serializable
 	int insert(Ligue ligue) throws SauvegardeImpossible
 	{
 		return passerelle.insert(ligue);
+	}
+	
+	void updateLigue(Ligue ligue) throws SauvegardeImpossible
+	{
+		passerelle.updateLigue(ligue);
+
 	}
 	/**
 	 * Transmet l'ordre d'ajout d'un employé à la passerelle
