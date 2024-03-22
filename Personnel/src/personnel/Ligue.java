@@ -115,14 +115,23 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	 * @return l'employé créé. 
 	 * @throws SauvegardeImpossible 
 	 */
+	
+	//quand mon employe est inconnu
 
-	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart) throws DateInvalide, SauvegardeImpossible
+	public Employe addEmploye( String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart) throws DateInvalide, SauvegardeImpossible
 	{
 		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, dateDepart);
 		employes.add(employe);
 		return employe;
 		
 	}
+	//quand mon employe est connu
+	
+	/*public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateArrivee,
+		LocalDate dateDepart, int id) throws DateInvalide, SauvegardeImpossible {
+		// TODO Auto-generated method stub
+		return null;
+	}*/
 	//changé à public 
      void remove(Employe employe)
 	{
@@ -156,4 +165,7 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		// TODO Auto-generated method stub
 		return id;
 	}
+
+
+	
 }

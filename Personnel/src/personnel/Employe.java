@@ -55,7 +55,7 @@ public class Employe implements Serializable, Comparable<Employe>
 
 		
     }
-	public Employe(GestionPersonnel gestionPersonnel, int id, Ligue ligue,String nom, String prenom, String password, String mail,  LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible, DateInvalide
+	 Employe(GestionPersonnel gestionPersonnel, int id, Ligue ligue,String nom, String prenom, String password, String mail,  LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible, DateInvalide
 	{
 		this.nom = nom;
 		this.prenom = prenom;
@@ -66,7 +66,6 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.dateDepart = dateDepart;
 		this.gestionPersonnel = gestionPersonnel;
 		this.id = id;
-		gestionPersonnel.updateEmploye(this);
 	}
 	/**
 	 * Retourne vrai ssi l'employé est administrateur de la ligue 

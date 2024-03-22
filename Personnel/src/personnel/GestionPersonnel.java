@@ -169,14 +169,14 @@ public class GestionPersonnel implements Serializable
 		return root;
 	}
 	
-	//addRoot sue le modèle de addLigue
-	public void addRoot() throws SauvegardeImpossible {
+	//addRoot sue le modèle de addLigue Quand le root est connu
+	public void addRoot() throws SauvegardeImpossible, DateInvalide {
        
-		root.setId(1);
-		root = passerelle.getRoot(root);
+	    root = new Employe(this, null, "root", "", "", "toor", null, null);
+
             
     }
-	//ajout de addRoot ici pouir qu'on n'ait pas à appeler new employe depuis le jdbc
+	//ajout de addRoot ici pouir qu'on n'ait pas à appeler new employe depuis le jdbc, quand le root est inconnu
 	
 	public void addRoot(int id, String nom, String password, String mail, LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible, DateInvalide {
 	    root = new Employe(this, id, null, nom, "", password, mail, dateArrivee, dateDepart);
