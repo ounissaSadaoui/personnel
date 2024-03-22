@@ -154,6 +154,11 @@ public class GestionPersonnel implements Serializable
 		return passerelle.insert(employe);
 	}
 
+	
+	void updateEmploye(Employe employe) throws SauvegardeImpossible, DateInvalide
+	{
+		passerelle.updateEmploye(employe);
+	}
 	/**
 	 * Retourne le root (super-utilisateur).
 	 * @return le root.

@@ -3,6 +3,7 @@ package jdbc;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -32,7 +33,7 @@ public class JDBC implements Passerelle
 	}
 
 	@Override
-	public GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible {
+	public GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible, DateInvalide {
 	    GestionPersonnel gestionPersonnel = new GestionPersonnel();
 	    try {
 
@@ -181,4 +182,56 @@ public class JDBC implements Passerelle
 		}
 	}
 
+	@Override
+	/*
+	public void updateEmploye(Employe employe) throws SauvegardeImpossible, DateInvalide 
+		{
+			try
+			{
+				PreparedStatement instruction;
+				instruction = connection.prepareStatement("UPDATE employe SET nom = ?, prenom = ?, mail= ? , password = ? , dateArrivee = ? , dateDepart = ? WHERE idEmploye = ?");
+				instruction.setString(1, employe.getNom());
+				instruction.setString(2, employe.getPrenom());
+				instruction.setString(3, employe.getMail());
+				instruction.setString(4, employe.getPassword());
+		        Date sqlDateArrivee = null;
+
+		        LocalDate dateArrivee = employe.getDateArrivee();
+
+		        if (dateArrivee != null) {
+		            sqlDateArrivee = Date.valueOf(dateArrivee);
+		        }
+		        instruction.setDate(5, sqlDateArrivee);
+		        LocalDate dateDepart = employe.getDateDepart();
+		        Date sqlDateDepart = null;
+		        if (dateDepart != null) {
+		            sqlDateDepart = Date.valueOf(dateDepart);
+		        }
+		        instruction.setDate(6, sqlDateDepart);
+				instruction.setInt(7, employe.getId());
+				instruction.executeUpdate();
+			}
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+				throw new SauvegardeImpossible(e);
+			}
+		}
+*/
+	public void updateEmploye(Employe employe) throws SauvegardeImpossible
+	{
+		try {
+			PreparedStatement instruction;
+			instruction = connection.prepareStatement("UPDATE employe SET nom = ?, prenom = ?, mail = ?, password= ? WHERE idLigue IS NULL");
+			instruction.setString(1, employe.getNom());
+			instruction.setString(2, employe.getPrenom());
+			instruction.setString(3, employe.getMail());
+			instruction.setString(4, employe.getPassword());
+			instruction.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new SauvegardeImpossible(e);
+		}
+	}
 }

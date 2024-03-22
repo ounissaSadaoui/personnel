@@ -55,12 +55,18 @@ public class Employe implements Serializable, Comparable<Employe>
 
 		
     }
-	public Employe(GestionPersonnel gestionPersonnel, int id, Ligue ligue,String nom, String prenom, String password, String mail,  LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible
+	public Employe(GestionPersonnel gestionPersonnel, int id, Ligue ligue,String nom, String prenom, String password, String mail,  LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible, DateInvalide
 	{
-		this.setNom(nom);
-		this.setPassword(password);
+		this.nom = nom;
+		this.prenom = prenom;
+		this.ligue = ligue;
+		this.mail= mail;
+		this.password= password;
+		this.dateArrivee= dateArrivee;
+		this.dateDepart = dateDepart;
 		this.gestionPersonnel = gestionPersonnel;
 		this.id = id;
+		gestionPersonnel.updateEmploye(this);
 	}
 	/**
 	 * Retourne vrai ssi l'employé est administrateur de la ligue 
@@ -101,9 +107,10 @@ public class Employe implements Serializable, Comparable<Employe>
 	/**
 	 * Retourne la date d'arrivée de l'employé.
 	 * @param la date d'arrivée de l'employé. 
+	 * @throws SauvegardeImpossible 
 	 */
 	
-	public void setDateArrivee(LocalDate dateArrivee) throws DateInvalide
+	public void setDateArrivee(LocalDate dateArrivee) throws DateInvalide, SauvegardeImpossible
 	{   
 		//cas date depart avant date arrivee
         if (dateDepart != null && dateArrivee != null && dateArrivee.isAfter(dateDepart)) {
@@ -111,6 +118,8 @@ public class Employe implements Serializable, Comparable<Employe>
         } else {
             //dans les autres cas
             this.dateArrivee = dateArrivee;
+    		gestionPersonnel.updateEmploye(this);
+
         }
 	}
 	
@@ -127,15 +136,18 @@ public class Employe implements Serializable, Comparable<Employe>
 	/**
 	 * change la date de départ de l'employé.
 	 * @param la date de départ de l'employé. 
+	 * @throws SauvegardeImpossible 
 	 */
 	
-	public void setDateDepart(LocalDate dateDepart) throws DateInvalide, DateTimeParseException
+	public void setDateDepart(LocalDate dateDepart) throws DateInvalide, DateTimeParseException, SauvegardeImpossible
 	{
 		if ((dateArrivee != null && dateDepart != null && dateDepart.isBefore(dateArrivee)) || (dateArrivee == null && dateDepart != null )) { 
 			throw new DateInvalide("La date de départ ne peut être antérieure à celle d'arrivée");
 	    } else {
 	        //dans les autres cass
 	        this.dateDepart = dateDepart;
+			gestionPersonnel.updateEmploye(this);
+
 	    }
 	}
 	
@@ -152,11 +164,15 @@ public class Employe implements Serializable, Comparable<Employe>
 	/**
 	 * Change le nom de l'employé.
 	 * @param nom le nouveau nom.
+	 * @throws DateInvalide 
+	 * @throws SauvegardeImpossible 
 	 */
 	
-	public void setNom(String nom)
+	public void setNom(String nom) throws SauvegardeImpossible, DateInvalide
 	{
 		this.nom = nom;
+		gestionPersonnel.updateEmploye(this);
+
 	}
 
 	/**
@@ -172,11 +188,15 @@ public class Employe implements Serializable, Comparable<Employe>
 	/**
 	 * Change le prénom de l'employé.
 	 * @param prenom le nouveau prénom de l'employé. 
+	 * @throws DateInvalide 
+	 * @throws SauvegardeImpossible 
 	 */
 
-	public void setPrenom(String prenom)
+	public void setPrenom(String prenom) throws SauvegardeImpossible, DateInvalide
 	{
 		this.prenom = prenom;
+		gestionPersonnel.updateEmploye(this);
+
 	}
 
 	/**
@@ -192,11 +212,15 @@ public class Employe implements Serializable, Comparable<Employe>
 	/**
 	 * Change le mail de l'employé.
 	 * @param mail le nouveau mail de l'employé.
+	 * @throws DateInvalide 
+	 * @throws SauvegardeImpossible 
 	 */
 
-	public void setMail(String mail)
+	public void setMail(String mail) throws SauvegardeImpossible, DateInvalide
 	{
 		this.mail = mail;
+		gestionPersonnel.updateEmploye(this);
+
 	}
 
 	/**
@@ -215,11 +239,14 @@ public class Employe implements Serializable, Comparable<Employe>
 	/**
 	 * Change le password de l'employé.
 	 * @param password le nouveau password de l'employé. 
+	 * @throws DateInvalide 
+	 * @throws SauvegardeImpossible 
 	 */
 	
-	public void setPassword(String password)
+	public void setPassword(String password) throws SauvegardeImpossible, DateInvalide
 	{
 		this.password= password;
+		gestionPersonnel.updateEmploye(this);
 	}
 
 	public String getPassword()

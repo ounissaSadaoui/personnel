@@ -7,6 +7,8 @@ import commandLineMenus.Menu;
 import commandLineMenus.Option;
 import personnel.DateInvalide;
 import personnel.Employe;
+import personnel.SauvegardeImpossible;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -40,23 +42,43 @@ public class EmployeConsole
 	private Option changerNom(final Employe employe)
 	{
 		return new Option("Changer le nom", "n", 
-				() -> {employe.setNom(getString("Nouveau nom : "));}
+				() -> {try {
+					employe.setNom(getString("Nouveau nom : "));
+				} catch (SauvegardeImpossible | DateInvalide e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}}
 			);
 	}
 	
 	private Option changerPrenom(final Employe employe)
 	{
-		return new Option("Changer le prénom", "p", () -> {employe.setPrenom(getString("Nouveau prénom : "));});
+		return new Option("Changer le prénom", "p", () -> {try {
+			employe.setPrenom(getString("Nouveau prénom : "));
+		} catch (SauvegardeImpossible | DateInvalide e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}});
 	}
 	
 	private Option changerMail(final Employe employe)
 	{
-		return new Option("Changer le mail", "e", () -> {employe.setMail(getString("Nouveau mail : "));});
+		return new Option("Changer le mail", "e", () -> {try {
+			employe.setMail(getString("Nouveau mail : "));
+		} catch (SauvegardeImpossible | DateInvalide e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}});
 	}
 	
 	private Option changerPassword(final Employe employe)
 	{
-		return new Option("Changer le password", "x", () -> {employe.setPassword(getString("Nouveau password : "));});
+		return new Option("Changer le password", "x", () -> {try {
+			employe.setPassword(getString("Nouveau password : "));
+		} catch (SauvegardeImpossible | DateInvalide e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}});
 	}
 	
 	 private Option ajouterDateDepart(final Employe employe) {
@@ -74,7 +96,10 @@ public class EmployeConsole
 	                 System.out.println("La date doit être au format 'AAAA-MM-JJ'. Veuillez réessayer.");
 	             } catch (DateInvalide e) {
 	                 System.out.println("Date invalide. Veuillez réessayer.");
-	             }
+	             } catch (SauvegardeImpossible e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	         } while (!saisieValide);
 	     });
 	 }
@@ -93,7 +118,10 @@ public class EmployeConsole
 	                 System.out.println("La date doit être au format 'AAAA-MM-JJ'. Veuillez réessayer.");
 	             } catch (DateInvalide e) {
 	                 System.out.println("Date invalide. Veuillez réessayer.");
-	             }
+	             } catch (SauvegardeImpossible e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	         } while (!saisieValide);
 	     });
 	 }
