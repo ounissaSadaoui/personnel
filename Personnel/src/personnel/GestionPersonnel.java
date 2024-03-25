@@ -35,7 +35,7 @@ public class GestionPersonnel implements Serializable
 	private SortedSet<Ligue> ligues;
 	private SortedSet<Employe> employes;
 	//cchngé à public aussi tension :
-	public Employe root  ; 
+	 Employe root  ; 
 	public final static int SERIALIZATION = 1, JDBC = 2,
 			TYPE_PASSERELLE = JDBC;   
 	
@@ -65,7 +65,7 @@ public class GestionPersonnel implements Serializable
 
 	public GestionPersonnel() {
 		if (gestionPersonnel != null)
-			throw new RuntimeException("Vous ne pouvez créer qu'une seuls instance de cet objet.");
+			throw new RuntimeException("Vous ne pouvez créer qu'une seule instance de cet objet.");
 		ligues = new TreeSet<>();
 		gestionPersonnel = this;
 	}
@@ -167,7 +167,7 @@ public class GestionPersonnel implements Serializable
 	public Employe getRoot()
 	{
 		return root;
-	}
+	} 
 	
 	//addRoot sue le modèle de addLigue Quand le root est connu
 	public void addRoot() throws SauvegardeImpossible, DateInvalide {
