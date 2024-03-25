@@ -141,9 +141,9 @@ public class GestionPersonnel implements Serializable
 		return passerelle.insert(ligue);
 	}
 	
-	void updateLigue(Ligue ligue) throws SauvegardeImpossible
+	void update(Ligue ligue) throws SauvegardeImpossible
 	{
-		passerelle.updateLigue(ligue);
+		passerelle.update(ligue);
 
 	}
 	/**
@@ -155,9 +155,9 @@ public class GestionPersonnel implements Serializable
 	}
 
 	
-	void updateEmploye(Employe employe) throws SauvegardeImpossible, DateInvalide
+	void update(Employe employe) throws SauvegardeImpossible, DateInvalide
 	{
-		passerelle.updateEmploye(employe);
+		passerelle.update(employe);
 	}
 	/**
 	 * Retourne le root (super-utilisateur).

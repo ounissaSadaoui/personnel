@@ -64,7 +64,7 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	        throw new SauvegardeImpossible(new RuntimeException("SauvegardeImpossible"));
 	    }
 	    this.nom = nom;
-		gestionPersonnel.updateLigue(this);
+		gestionPersonnel.update(this);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		if (administrateur != root && administrateur.getLigue() != this)
 			throw new DroitsInsuffisants();
 		this.administrateur = administrateur;
-        gestionPersonnel.updateLigue(this);
+        gestionPersonnel.update(this);
 }
 
 	/**
@@ -162,8 +162,7 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	}
 
 	public int getId() {
-		// TODO Auto-generated method stub
-		return id;
+		return this.id;
 	}
 
 

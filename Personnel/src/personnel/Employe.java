@@ -117,7 +117,7 @@ public class Employe implements Serializable, Comparable<Employe>
         } else {
             //dans les autres cas
             this.dateArrivee = dateArrivee;
-    		gestionPersonnel.updateEmploye(this);
+    		gestionPersonnel.update(this);
 
         }
 	}
@@ -145,7 +145,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	    } else {
 	        //dans les autres cass
 	        this.dateDepart = dateDepart;
-			gestionPersonnel.updateEmploye(this);
+			gestionPersonnel.update(this);
 
 	    }
 	}
@@ -170,7 +170,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	public void setNom(String nom) throws SauvegardeImpossible, DateInvalide
 	{
 		this.nom = nom;
-		gestionPersonnel.updateEmploye(this);
+		gestionPersonnel.update(this);
 
 	}
 
@@ -194,7 +194,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	public void setPrenom(String prenom) throws SauvegardeImpossible, DateInvalide
 	{
 		this.prenom = prenom;
-		gestionPersonnel.updateEmploye(this);
+		gestionPersonnel.update(this);
 
 	}
 
@@ -218,7 +218,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	public void setMail(String mail) throws SauvegardeImpossible, DateInvalide
 	{
 		this.mail = mail;
-		gestionPersonnel.updateEmploye(this);
+		gestionPersonnel.update(this);
 
 	}
 
@@ -245,7 +245,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	public void setPassword(String password) throws SauvegardeImpossible, DateInvalide
 	{
 		this.password= password;
-		gestionPersonnel.updateEmploye(this);
+		gestionPersonnel.update(this);
 	}
 
 	public String getPassword()
@@ -255,10 +255,6 @@ public class Employe implements Serializable, Comparable<Employe>
 	
 	//get set pour id 
 	
-	public void setId (int id)
-	{
-		this.id = id;
-	}
 	
 	public int getId ()
 	{

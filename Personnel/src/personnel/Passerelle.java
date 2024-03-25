@@ -7,6 +7,6 @@ public interface Passerelle
 	public int insert(Ligue ligue) throws SauvegardeImpossible;
 	public int insert(Employe employe) throws SauvegardeImpossible;
 	public Employe getRoot(Employe root);
-	public void updateLigue (Ligue ligue) throws SauvegardeImpossible;
-	public void updateEmploye(Employe employe) throws SauvegardeImpossible, DateInvalide;
+	public void update(Ligue ligue) throws SauvegardeImpossible;
+	public void update(Employe employe) throws SauvegardeImpossible, DateInvalide;
 }
