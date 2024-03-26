@@ -182,4 +182,9 @@ public class GestionPersonnel implements Serializable
 		passerelle.delete(employe);
 
 	}
+	void delete(Ligue ligue) throws SauvegardeImpossible {
+
+		passerelle.delete(ligue);
+
+	}
 }
