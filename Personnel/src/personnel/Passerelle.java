@@ -9,4 +9,6 @@ public interface Passerelle
 	public Employe getRoot(Employe root);
 	public void update(Ligue ligue) throws SauvegardeImpossible;
 	public void update(Employe employe) throws SauvegardeImpossible, DateInvalide;
+	
+    public void delete(Employe employe) throws SauvegardeImpossible;
 }

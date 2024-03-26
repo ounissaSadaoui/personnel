@@ -1,9 +1,6 @@
 package personnel;
 
 import java.io.Serializable;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.SortedSet;
@@ -34,7 +31,6 @@ public class GestionPersonnel implements Serializable
 	private static GestionPersonnel gestionPersonnel = null;
 	private SortedSet<Ligue> ligues;
 	private SortedSet<Employe> employes;
-	//cchngé à public aussi tension :
 	 Employe root  ; 
 	public final static int SERIALIZATION = 1, JDBC = 2,
 			TYPE_PASSERELLE = JDBC;   
@@ -67,6 +63,7 @@ public class GestionPersonnel implements Serializable
 		if (gestionPersonnel != null)
 			throw new RuntimeException("Vous ne pouvez créer qu'une seule instance de cet objet.");
 		ligues = new TreeSet<>();
+		employes = new TreeSet<>();
 		gestionPersonnel = this;
 	}
 	
@@ -172,7 +169,7 @@ public class GestionPersonnel implements Serializable
 	//addRoot sue le modèle de addLigue Quand le root est connu
 	public void addRoot() throws SauvegardeImpossible, DateInvalide {
        
-	    root = new Employe(this, null, "root", "", "", "toor", null, null);
+	    root = new Employe(this, null, "root", "", "", "toor", null, null); 
 
             
     }
@@ -180,5 +177,9 @@ public class GestionPersonnel implements Serializable
 	
 	public void addRoot(int id, String nom, String password, String mail, LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible, DateInvalide {
 	    root = new Employe(this, id, null, nom, "", password, mail, dateArrivee, dateDepart);
+	}
+	void delete(Employe employe) throws SauvegardeImpossible {
+		passerelle.delete(employe);
+
 	}
 }

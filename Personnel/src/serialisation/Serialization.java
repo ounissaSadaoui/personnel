@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import personnel.DateInvalide;
 import personnel.Employe;
 import personnel.GestionPersonnel;
 import personnel.Ligue;
@@ -61,6 +62,18 @@ public class Serialization implements personnel.Passerelle
 	public Employe getRoot(Employe root) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void update(Ligue ligue) throws SauvegardeImpossible {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(Employe employe) throws SauvegardeImpossible, DateInvalide {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

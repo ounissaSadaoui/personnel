@@ -49,7 +49,7 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	 * @return le nom de la ligue.
 	 */
 
-	public String getNom()
+	public String getNom() 
 	{
 		return nom;
 	}
@@ -113,9 +113,10 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	 * @param mail l'adresse mail de l'employé.
 	 * @param password le password de l'employé.
 	 * @return l'employé créé. 
+	 * @throws DateInvalide 
 	 * @throws SauvegardeImpossible 
 	 */
-	
+	/*
 	//quand mon employe est inconnu
 
 	public Employe addEmploye( String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart) throws DateInvalide, SauvegardeImpossible
@@ -132,7 +133,24 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		// TODO Auto-generated method stub
 		return null;
 	}*/
-	//changé à public 
+	
+	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateArrive, LocalDate dateDepart) throws DateInvalide, SauvegardeImpossible {
+		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrive, dateDepart);
+		employes.add(employe);
+		try {
+			employe.setId(gestionPersonnel.insert(employe));
+		} catch (SauvegardeImpossible e) {
+			e.printStackTrace();
+		}
+		return employe;
+	}
+
+	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateArrive, LocalDate dateDepart, int id) throws DateInvalide, SauvegardeImpossible {
+		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrive, dateDepart);
+		employe.setId(id);
+		employes.add(employe);
+		return employe;
+	}
      void remove(Employe employe)
 	{
 		employes.remove(employe);

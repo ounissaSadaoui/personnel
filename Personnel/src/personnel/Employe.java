@@ -31,8 +31,8 @@ public class Employe implements Serializable, Comparable<Employe>
 	//ajout des var pour surcharge su constructeur
 	private SortedSet<Employe> employes;
 	private Employe administrateur;
+	//tets
 	
-	//attention you changed it to public!!!
 	Employe(GestionPersonnel gestionPersonnel, 
 			Ligue ligue, 
 			String nom, 
@@ -40,7 +40,8 @@ public class Employe implements Serializable, Comparable<Employe>
 			String mail, 
 			String password, 
 			LocalDate dateArrivee, 
-			LocalDate dateDepart) throws DateInvalide, SauvegardeImpossible
+			LocalDate dateDepart)
+		 throws DateInvalide, SauvegardeImpossible
 {
 		this.gestionPersonnel = gestionPersonnel;
 		this.nom = nom;
@@ -255,6 +256,11 @@ public class Employe implements Serializable, Comparable<Employe>
 	
 	//get set pour id 
 	
+	public void setId (int id)
+	{
+		this.id = id;
+	}
+	
 	
 	public int getId ()
 	{
@@ -285,6 +291,8 @@ public class Employe implements Serializable, Comparable<Employe>
 			if (estAdmin(getLigue()))
 				getLigue().setAdministrateur(root);
 			getLigue().remove(this);
+			gestionPersonnel.delete(this);
+			
 		}
 		else
 			throw new ImpossibleDeSupprimerRoot();
