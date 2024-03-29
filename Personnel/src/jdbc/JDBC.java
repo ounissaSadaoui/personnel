@@ -97,9 +97,27 @@ public class JDBC implements Passerelle
 
 		GestionPersonnel gestionPersonnel = new GestionPersonnel();
 		try {
-			String requete = "SELECT * FROM ligue";
-			Statement instruction = connection.createStatement();
-			ResultSet ligues = instruction.executeQuery(requete);
+			// Requête SQL pour sélectionner les informations du root depuis la base de données
+	        String requete = "SELECT * FROM employe WHERE idLigue IS NULL";
+	        PreparedStatement instruction = connection.prepareStatement(requete);
+	        ResultSet resultSet = instruction.executeQuery();
+
+	        if (resultSet.next()) {
+	        	 String nom = resultSet.getString("nom");
+	                String password = resultSet.getString("password");
+	                int id = resultSet.getInt("idEmploye");
+	                gestionPersonnel.addRoot(id, nom, password, "", null, null);
+	        } else if (!resultSet.next()) {
+		            gestionPersonnel.addRoot();
+	            } else {
+	                throw new SauvegardeImpossible(new RuntimeException("Sauvegarde Impossible !!"));
+	            }
+
+	        //resultSet.close();
+	        //instruction.close();
+			String requeteLigue = "SELECT * FROM ligue";
+			Statement instructionLigue = connection.createStatement();
+			ResultSet ligues = instructionLigue.executeQuery(requeteLigue);
 
 			while (ligues.next()) {
 
