@@ -98,8 +98,8 @@ public class JDBC implements Passerelle
 		GestionPersonnel gestionPersonnel = new GestionPersonnel();
 		try {
 			// Requête SQL pour sélectionner les informations du root depuis la base de données
-	        String requete = "SELECT * FROM employe WHERE idLigue IS NULL";
-	        PreparedStatement instruction = connection.prepareStatement(requete);
+	        String requeteRoot = "SELECT * FROM employe WHERE idLigue IS NULL";
+	        PreparedStatement instruction = connection.prepareStatement(requeteRoot);
 	        ResultSet resultSet = instruction.executeQuery();
 
 	        if (resultSet.next()) {
@@ -299,7 +299,7 @@ public class JDBC implements Passerelle
 	public void delete(Employe employe) throws SauvegardeImpossible {
 		try {
 			PreparedStatement instruction;
-			instruction = connection.prepareStatement("DELETE FROM employe WHERE idEmploye = ? AND idLigue IS NULL");
+			instruction = connection.prepareStatement("DELETE FROM employe WHERE idEmploye = ? ");
 			instruction.setInt(1, employe.getId());
 			instruction.executeUpdate();
 
@@ -313,7 +313,7 @@ public class JDBC implements Passerelle
 	public void delete(Ligue ligue) throws SauvegardeImpossible {
 		try {
 			PreparedStatement instruction;
-			instruction = connection.prepareStatement("DELETE FROM ligue WHERE idLigue = ? AND idLigue IS NOT NULL");
+			instruction = connection.prepareStatement("DELETE FROM ligue WHERE idLigue = ?");
 			instruction.setInt(1, ligue.getId());
 			instruction.executeUpdate();
 
