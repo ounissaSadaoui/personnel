@@ -1,48 +1,57 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 public class Frame extends JFrame {
 	
 	public Frame() {
 		
-		super("LDO - Ligues Dynamiques et organisées");
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		this.setSize(600, 400);
-		this.setLocationRelativeTo(null);
-	
-        JPanel contentPane = (JPanel) this.getContentPane();
-        contentPane.setLayout(new BorderLayout());
+		// Configuration de la fenêtre
+        super("LDO - Ligues Dynamiques et Organisées");
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setSize(600, 400);
+        this.setLocationRelativeTo(null);
 
-        JTextField userField = new JTextField("Nom", 20);
-        contentPane.add(userField);
-        userField.setLayout(new FlowLayout(FlowLayout.CENTER));
-        userField.setPreferredSize(new Dimension(100, 30)); 
+        // Création des composants
+        JPanel contentPane = new JPanel(new BorderLayout());
+        this.setContentPane(contentPane);
+
+        // Champ utilisateur
+        JTextField userField = new JTextField("Nom"); 
+        JTextField mdpField = new JTextField("Mot de passe"); 
         
-        // creation et position du bouton
+        // Taille des champs
+        Dimension fieldSize = new Dimension(20, 10);
+        userField.setPreferredSize(fieldSize);
+        mdpField.setPreferredSize(fieldSize);
+        
+        // Disposition des champs
+        JPanel userPanel = new JPanel();
+        userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.Y_AXIS));
+        userPanel.add(userField);
+        userPanel.add(Box.createVerticalStrut(10));
+        userPanel.add(mdpField);
+        contentPane.add(userPanel, BorderLayout.CENTER);
+        
+
+        // Bouton de connexion
         JButton button = new JButton("Connexion");
-        button.setPreferredSize(new Dimension(100, 30)); 
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        button.setPreferredSize(new Dimension(100, 30)); //
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(button);
-
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
-        contentPane.setBackground(new Color(12, 23, 40));
-        buttonPanel.setBackground(new Color(12, 23, 40));
-   
-	}
-	
+        // Configuration des couleurs
+        Color backgroundColor = new Color(12, 23, 40);
+        contentPane.setBackground(backgroundColor);
+        userPanel.setBackground(backgroundColor);
+        buttonPanel.setBackground(backgroundColor);
+    }
+
 	public static void main(String[] args) {
 		Frame firstWindow = new Frame();
 		firstWindow.setVisible(true);
