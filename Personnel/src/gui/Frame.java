@@ -19,7 +19,15 @@ public class Frame extends JFrame {
         // Création des composants
         JPanel contentPane = new JPanel(new BorderLayout());
         this.setContentPane(contentPane);
-        contentPane.setBorder(BorderFactory.createEmptyBorder(150, 60, 0, 60));
+        contentPane.setBorder(BorderFactory.createEmptyBorder(0, 60, 0, 60));
+        
+        // Ajout logo
+        ImageIcon logoIcon = new ImageIcon("/Users/cynthia/Documents/itic_paris/dev/personnel/Personnel/docs/logo.png");
+        Image img = logoIcon.getImage();
+        Image newImg = img.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        logoIcon.setImage(newImg);
+        JLabel logoLabel = new JLabel(logoIcon);
+        logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         // Champs de connexion
         JTextField userField = new JTextField("Nom"); 
@@ -61,6 +69,7 @@ public class Frame extends JFrame {
         button.setPreferredSize(new Dimension(100, 30));
         fieldsPanel.add(button, gbc);
 
+        contentPane.add(logoLabel, BorderLayout.NORTH);
         contentPane.add(fieldsPanel, BorderLayout.CENTER);
 
         // Configuration des couleurs
