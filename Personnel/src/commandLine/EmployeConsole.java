@@ -66,7 +66,6 @@ public class EmployeConsole
 		return new Option("Changer le mail", "e", () -> {try {
 			employe.setMail(getString("Nouveau mail : "));
 		} catch (SauvegardeImpossible | DateInvalide e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}});
 	}
@@ -76,7 +75,6 @@ public class EmployeConsole
 		return new Option("Changer le password", "x", () -> {try {
 			employe.setPassword(getString("Nouveau password : "));
 		} catch (SauvegardeImpossible | DateInvalide e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}});
 	}

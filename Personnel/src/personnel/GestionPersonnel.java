@@ -121,12 +121,7 @@ public class GestionPersonnel implements Serializable
 		ligues.add(ligue);
 		return ligue;
 	}
-	/*public Employe addRoot (int id , String nom,  Ligue ligue, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart)  throws SauvegardeImpossible, DateInvalide
-	{
-		Employe root = new Employe (this, id, null, nom, prenom ,null, password, null, null);
-		employes.add(root);
-		return root; 
-	}*/
+	
 
 	void remove(Ligue ligue)
 	{

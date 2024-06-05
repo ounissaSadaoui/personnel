@@ -52,9 +52,9 @@ public class Employe implements Serializable, Comparable<Employe>
 		// on passe par les setter pour pouvoir valider les dates
 		setDateArrivee(dateArrivee);
 		setDateDepart(dateDepart);
-		this.id = gestionPersonnel.insert(this); 
-
-		
+		if (gestionPersonnel.getRoot() == null) {
+			this.id = gestionPersonnel.insert(this); 
+		}
     }
 	 Employe(GestionPersonnel gestionPersonnel, int id, Ligue ligue,String nom, String prenom, String password, String mail,  LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible, DateInvalide
 	{
@@ -66,7 +66,7 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.dateArrivee= dateArrivee;
 		this.dateDepart = dateDepart;
 		this.gestionPersonnel = gestionPersonnel;
-		this.id = id;
+	    this.id = id;
 	}
 	/**
 	 * Retourne vrai ssi l'employé est administrateur de la ligue 

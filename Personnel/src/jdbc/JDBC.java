@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.time.LocalDate;
 
 import personnel.*;
@@ -103,7 +104,7 @@ public class JDBC implements Passerelle
 	        ResultSet resultSet = instruction.executeQuery();
 
 	        if (resultSet.next()) {
-	        	 String nom = resultSet.getString("nom");
+	        	    String nom = resultSet.getString("nom");
 	                String password = resultSet.getString("password");
 	                int id = resultSet.getInt("idEmploye");
 	                gestionPersonnel.addRoot(id, nom, password, "", null, null);
@@ -143,7 +144,7 @@ public class JDBC implements Passerelle
 							? LocalDate.parse(employe.getString("dateDepart"))
 							: null;
 
-					Employe employee = ligue.addEmploye(nom, prenom, mail, password, date_arrivee, date_depart, id);
+					ligue.addEmploye(nom, prenom, mail, password, date_arrivee, date_depart, id);
 
 				}
 			}
@@ -193,7 +194,7 @@ public class JDBC implements Passerelle
 			throw new SauvegardeImpossible(exception);
 		}		
 	}
-/*
+
 	@Override
 	public int insert(Employe employe) throws SauvegardeImpossible {
 		try {
@@ -207,50 +208,22 @@ public class JDBC implements Passerelle
 			instruction.setString(4, employe.getPassword());
 			instruction.setDate(5, employe.getDateArrivee() == null ? null : Date.valueOf(employe.getDateArrivee()));
 			instruction.setDate(6, employe.getDateDepart() == null ? null : Date.valueOf(employe.getDateDepart()));
-			
-			instruction.setInt(7, employe.getLigue().getId());
+			//cas root, ou il n'a pas de ligue associéé
+			if (employe.getLigue() == null) {
+	            instruction.setNull(7, Types.INTEGER);
+	        } else {//cas autre employe, avec une ligue
+
+	            instruction.setInt(7, employe.getLigue().getId());
+	        }
 			instruction.executeUpdate();
 			ResultSet id = instruction.getGeneratedKeys();
 			id.next();
-
 			return id.getInt(1);
 		} catch (SQLException exception) {
 			exception.printStackTrace();
 			throw new SauvegardeImpossible(exception);
 		}
-	}*/
-	@Override
-	public int insert(Employe employe) throws SauvegardeImpossible {
-	    try {
-	        PreparedStatement instruction;
-	        if (employe.getLigue() != null) { // Si la ligue de l'employé est non null, ce n'est pas le root
-	            instruction = connection.prepareStatement(
-	                    "INSERT INTO employe (nom, prenom, mail, password, dateArrivee, dateDepart, idLigue) VALUES (?,?,?,?,?,?,?)",
-	                    Statement.RETURN_GENERATED_KEYS);
-	            instruction.setInt(7, employe.getLigue().getId());
-	        } else { // Si la ligue de l'employé est null, c'est le root
-	            instruction = connection.prepareStatement(
-	                    "INSERT INTO employe (nom, prenom, mail, password, dateArrivee, dateDepart) VALUES (?,?,?,?,?,?)",
-	                    Statement.RETURN_GENERATED_KEYS);
-	        }
-	        instruction.setString(1, employe.getNom());
-	        instruction.setString(2, employe.getPrenom());
-	        instruction.setString(3, employe.getMail());
-	        instruction.setString(4, employe.getPassword());
-	        instruction.setDate(5, employe.getDateArrivee() == null ? null : Date.valueOf(employe.getDateArrivee()));
-	        instruction.setDate(6, employe.getDateDepart() == null ? null : Date.valueOf(employe.getDateDepart()));
-	        instruction.executeUpdate();
-	        ResultSet id = instruction.getGeneratedKeys();
-	        id.next();
-
-	        return id.getInt(1);
-	    } catch (SQLException exception) {
-	        exception.printStackTrace();
-	        throw new SauvegardeImpossible(exception);
-	    }
 	}
-	
-
 
 
 	@Override
@@ -280,14 +253,14 @@ public class JDBC implements Passerelle
 	{
 		try {
 			PreparedStatement instruction;
-			instruction = connection.prepareStatement("UPDATE employe SET nom = ?, prenom = ?, mail = ?, password= ?, dateArrivee = ? WHERE idEmploye  = ?");
+			instruction = connection.prepareStatement("UPDATE employe SET nom = ?, prenom = ?, mail = ?, password= ?, dateArrivee = ?, dateDepart = ? WHERE idEmploye  = ?");
 			instruction.setString(1, employe.getNom());
 			instruction.setString(2, employe.getPrenom());
 			instruction.setString(3, employe.getMail());
 			instruction.setString(4, employe.getPassword());
 			instruction.setDate(5, employe.getDateArrivee() == null ? null : Date.valueOf(employe.getDateArrivee()));
-			//instruction.setDate(6, employe.getDateDepart() == null ? null : Date.valueOf(employe.getDateDepart()));
-			instruction.setInt(6, employe.getId());
+			instruction.setDate(6, employe.getDateDepart() == null ? null : Date.valueOf(employe.getDateDepart()));
+			instruction.setInt(7, employe.getId());
 			instruction.executeUpdate();
 		}
 		catch (SQLException e) {
