@@ -82,9 +82,13 @@ public class JDBC implements Passerelle
 					LocalDate date_depart = employe.getDate("dateDepart") != null
 							? LocalDate.parse(employe.getString("dateDepart"))
 							: null;
-
-					ligue.addEmploye(nom, prenom, mail, password, date_arrivee, date_depart, id);
-
+                   
+					Employe employee = ligue.addEmploye(nom, prenom, mail, password, date_arrivee, date_depart, id);
+                	ligue.setAdministrateur(employee);
+ 
+					if (employee == ligue.getAdministrateur()) {
+	                    	ligue.setAdministrateur(employee);
+	                    }
 				}
 			}
 		} catch (SQLException exception) {
@@ -167,8 +171,8 @@ public class JDBC implements Passerelle
 
 	@Override
 	public Employe getRoot(Employe root) {
-		// TODO Auto-generated method stub
-		return null;
+		// are you sure ? c'était en todo ici, regarde bien si pas de problèmmes après ça
+		return root;
 	}
 
 	@Override
