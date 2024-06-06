@@ -32,68 +32,7 @@ public class JDBC implements Passerelle
 			System.out.println(e);
 		}
 	}
-/*
-	@Override
-	public GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible, DateInvalide {
-	    GestionPersonnel gestionPersonnel = new GestionPersonnel();
-	    try {
-	    	// Requête SQL pour sélectionner les informations du root depuis la base de données
-	        String requete = "SELECT * FROM employe WHERE idLigue IS NULL";
-	        PreparedStatement instruction = connection.prepareStatement(requete);
-	        ResultSet resultSet = instruction.executeQuery();
 
-	        if (resultSet.next()) {
-	        	 String nom = resultSet.getString("nom");
-	                String password = resultSet.getString("password");
-	                int id = resultSet.getInt("idEmploye");
-	                gestionPersonnel.addRoot(id, nom, password, "", null, null);
-	        } else if (!resultSet.next()) {
-		            gestionPersonnel.addRoot();
-	            } else {
-	                throw new SauvegardeImpossible(new RuntimeException("Sauvegarde Impossible !!"));
-	            }
-
-	        //resultSet.close();
-	        //instruction.close();
-	        
-	        String requeteLigue = "SELECT * FROM ligue ";
-			Statement instructionLigue = connection.createStatement();
-			ResultSet ligues = instructionLigue.executeQuery(requeteLigue);
-
-			while (ligues.next()) {
-
-				gestionPersonnel.addLigue(ligues.getInt("idLigue"), ligues.getString("nom"));
-
-				PreparedStatement req = connection.prepareStatement("SELECT * FROM employe WHERE idLigue = ?");
-
-				req.setInt(1, ligues.getInt("idLigue"));
-				ResultSet employe = req.executeQuery();
-				Ligue ligue = gestionPersonnel.getLigues().last();
-
-				while (employe.next()) {
-
-					int id = employe.getInt("idEmploye");
-					String nom = employe.getString("nom");
-					String prenom = employe.getString("prenom");
-					String mail = employe.getString("mail");
-					String password = employe.getString("password");
-					LocalDate date_arrivee = employe.getDate("dateArrivee") != null
-							? LocalDate.parse(employe.getString("dateArrivee"))
-							: null;
-					LocalDate date_depart = employe.getDate("dateDepart") != null
-							? LocalDate.parse(employe.getString("dateDepart"))
-							: null;
-
-					Employe employee = ligue.addEmploye(nom, prenom, mail, password, date_arrivee, date_depart, id);		
-					}
-				}
-		} catch (SQLException exception) {
-			exception.printStackTrace();
-			throw new SauvegardeImpossible(exception);
-	    }
-	    return gestionPersonnel;
-	}
-*/
 	public GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible, DateInvalide {
 
 		GestionPersonnel gestionPersonnel = new GestionPersonnel();
@@ -285,15 +224,24 @@ public class JDBC implements Passerelle
 	@Override
 	public void delete(Ligue ligue) throws SauvegardeImpossible {
 		try {
-			PreparedStatement instruction;
-			instruction = connection.prepareStatement("DELETE FROM ligue WHERE idLigue = ?");
-			instruction.setInt(1, ligue.getId());
-			instruction.executeUpdate();
+	        // Supprimer les employés de la ligue
+	        PreparedStatement deleteEmployes = connection.prepareStatement("DELETE FROM employe WHERE idLigue = ?");
+	        deleteEmployes.setInt(1, ligue.getId());
+	        deleteEmployes.executeUpdate();
 
-		} catch (SQLException exception) {
-			exception.printStackTrace();
-			throw new SauvegardeImpossible(exception);
-		}
+	        // Supprimer la ligue
+	        PreparedStatement deleteLigue = connection.prepareStatement("DELETE FROM ligue WHERE idLigue = ?");
+	        deleteLigue.setInt(1, ligue.getId());
+	        deleteLigue.executeUpdate();
 
+	        System.out.println("Ligue supprimée avec succès.");
+
+	    } catch (SQLException exception) {
+	        exception.printStackTrace();
+	        throw new SauvegardeImpossible(exception);
+	    }
 	}
+
+	
+	
 }
