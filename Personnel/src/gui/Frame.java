@@ -1,72 +1,59 @@
 package gui;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.*;
 
 public class Frame extends JFrame {
-	
-	public Frame() {
-		
-		// Configuration de la fenêtre
+
+    public Frame() {
+
+        // Configuration de la fenêtre
         super("LDO - Ligues Dynamiques et Organisées");
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setSize(600, 400);
-        this.setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(600, 400);
+        setLocationRelativeTo(null);
 
         // Création des composants
         JPanel contentPane = new JPanel(new BorderLayout());
-        this.setContentPane(contentPane);
+        setContentPane(contentPane);
         contentPane.setBorder(BorderFactory.createEmptyBorder(0, 60, 0, 60));
-        
+
         // Ajout logo
-        ImageIcon logoIcon = new ImageIcon("/Users/cynthia/Documents/itic_paris/dev/personnel/Personnel/docs/logo.png");
-        Image img = logoIcon.getImage();
-        Image newImg = img.getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-        logoIcon.setImage(newImg);
-        JLabel logoLabel = new JLabel(logoIcon);
+        JLabel logoLabel = new JLabel(new ImageIcon(new ImageIcon("/Users/cynthia/Documents/itic_paris/dev/personnel/Personnel/docs/logo.png")
+                .getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH)));
         logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         // Champs de connexion
-        JTextField userField = new JTextField("Nom"); 
-        JTextField mdpField = new JTextField("Mot de passe"); 
-        
-        // Bouton de connexion
+        JTextField userField = new JTextField("Nom", 20);
+        JTextField mdpField = new JTextField("Mot de passe", 20);
+
+        // Création d'un bouton pour ouvrir la nouvelle fenêtre
         JButton button = new JButton("Connexion");
-        
+        button.addActionListener(e -> {
+            Ligue newFrame = new Ligue();
+            newFrame.setVisible(true);
+        });
+
+        button.setPreferredSize(new Dimension(100, 30));
+        contentPane.add(button, BorderLayout.CENTER);
+        setContentPane(contentPane);
+
         // Panneau pour les champs de texte et le bouton
         JPanel fieldsPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
-        
-        // Champ utilisateur
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        gbc.weightx = 1.0;
-        userField.setPreferredSize(new Dimension(200, 30));
         fieldsPanel.add(userField, gbc);
-
-        // Champ mot de passe
-        gbc.gridy = 1;
-        mdpField.setPreferredSize(new Dimension(200, 30));
+        gbc.gridy++;
         fieldsPanel.add(mdpField, gbc);
-
-        // Espacement vertical
-        gbc.gridy = 2;
-        gbc.gridwidth = 2;
+        gbc.gridy++;
         fieldsPanel.add(Box.createVerticalStrut(10), gbc);
-
-        // Bouton de connexion
-        gbc.gridy = 3;
-        gbc.gridwidth = 2;
+        gbc.gridy++;
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.CENTER;
-        button.setPreferredSize(new Dimension(100, 30));
         fieldsPanel.add(button, gbc);
 
         contentPane.add(logoLabel, BorderLayout.NORTH);
@@ -76,12 +63,11 @@ public class Frame extends JFrame {
         Color backgroundColor = new Color(12, 23, 40);
         contentPane.setBackground(backgroundColor);
         fieldsPanel.setBackground(backgroundColor);
-
     }
 
-	public static void main(String[] args) {
-		Frame firstWindow = new Frame();
-		firstWindow.setVisible(true);
-	}
-
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new Frame().setVisible(true);
+        });
+    }
 }
