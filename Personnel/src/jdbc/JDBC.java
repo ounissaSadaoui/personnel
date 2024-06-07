@@ -10,6 +10,8 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.time.LocalDate;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import personnel.*;
 
 public class JDBC implements Passerelle 
@@ -148,7 +150,9 @@ public class JDBC implements Passerelle
 			instruction.setString(1, employe.getNom());
 			instruction.setString(2, employe.getPrenom());
 			instruction.setString(3, employe.getMail());
-			instruction.setString(4, employe.getPassword());
+	        // Hacher le mot de passe avant de l'assigner
+	        String hashedPassword = BCrypt.hashpw(employe.getPassword(), BCrypt.gensalt());
+	        instruction.setString(4, hashedPassword);
 			instruction.setDate(5, employe.getDateArrivee() == null ? null : Date.valueOf(employe.getDateArrivee()));
 			instruction.setDate(6, employe.getDateDepart() == null ? null : Date.valueOf(employe.getDateDepart()));
 			//cas root, ou il n'a pas de ligue associéé
@@ -171,7 +175,7 @@ public class JDBC implements Passerelle
 
 	@Override
 	public Employe getRoot(Employe root) {
-		// are you sure ? c'était en todo ici, regarde bien si pas de problèmmes après ça
+		// are you sure ? c'était en todo ici, regarde bien si pas de problèmes après ça
 		return root;
 	}
 

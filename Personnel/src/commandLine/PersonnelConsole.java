@@ -62,22 +62,50 @@ public class PersonnelConsole
 	{
 		return new Option("Quitter sans enregistrer", "a", Action.QUIT);
 	}
-	
+	/*
 	private boolean verifiePassword()
 	{
 		boolean ok = gestionPersonnel.getRoot().checkPassword(getString("password : "));
+		
 		if (!ok)
 			System.out.println("Password incorrect.");
 		return ok;
 	}
+	*/
+	
+	  public boolean verifiePassword() {
+	        // Supposons que vous avez une méthode getString pour récupérer le mot de passe de l'utilisateur.
+	        String inputPassword = getString("password : ");
+
+	        // Récupérez l'employé root (ou un autre employé si nécessaire) depuis la base de données.
+	        Employe root = gestionPersonnel.getRoot();
+
+	        // Utilisez la méthode checkPassword de la classe Employe pour vérifier le mot de passe.
+	        boolean ok = root.checkPassword(inputPassword);
+
+	        if (!ok) {
+	            System.out.println("Password incorrect.");
+	        }
+
+	        return ok;
+	    }
+
 	
 	public static void main(String[] args) throws SauvegardeImpossible, DateInvalide
 	{
 	    String url = "jdbc:mysql://localhost:3306/projet_java?serverTimezone=Europe/Paris";
 
-		PersonnelConsole personnelConsole = 
-				new PersonnelConsole(GestionPersonnel.getGestionPersonnel());
-		if (personnelConsole.verifiePassword())
-			personnelConsole.start();
-	}
+	    GestionPersonnel gestionPersonnel = GestionPersonnel.getGestionPersonnel();
+
+        // Assurez-vous que le root est créé avec un mot de passe haché
+        if (gestionPersonnel.getRoot() == null) {
+            gestionPersonnel.addRoot();
+        }
+
+        PersonnelConsole personnelConsole = new PersonnelConsole(gestionPersonnel);
+
+        if (personnelConsole.verifiePassword()) {
+            personnelConsole.start();
+        }
+    }
 }

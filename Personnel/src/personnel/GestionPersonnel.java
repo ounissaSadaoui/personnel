@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import jdbc.Credentials;
 
 import java.sql.DriverManager;
@@ -163,11 +165,13 @@ public class GestionPersonnel implements Serializable
 	
 	//addRoot sue le modèle de addLigue Quand le root est connu
 	public void addRoot() throws SauvegardeImpossible, DateInvalide {
-       
-	    root = new Employe(this, null, "root", "", "", "toor", null, null); 
+	    // Créez un mot de passe haché pour le root
+	    String hashedPassword = BCrypt.hashpw("toor", BCrypt.gensalt());
 
-            
-    }
+	    // Utilisez le mot de passe haché lors de la création de l'employé root
+	    root = new Employe(this, null, "root", "", "", hashedPassword, null, null);
+	}
+
 	//ajout de addRoot ici pouir qu'on n'ait pas à appeler new employe depuis le jdbc, quand le root est inconnu
 	
 	public void addRoot(int id, String nom, String password, String mail, LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible, DateInvalide {

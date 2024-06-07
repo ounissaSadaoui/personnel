@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.*;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import org.mindrot.jbcrypt.BCrypt;
 
 import personnel.DateInvalide;
 
@@ -231,7 +232,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * @param password le password auquel comparer celui de l'employé.
 	 */
 	
-	public boolean checkPassword(String password)
+	/*public boolean checkPassword(String password)
 	{
 		return this.password.equals(password);
 	}
@@ -242,7 +243,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * @throws DateInvalide 
 	 * @throws SauvegardeImpossible 
 	 */
-	
+	/*
 	public void setPassword(String password) throws SauvegardeImpossible, DateInvalide
 	{
 		this.password= password;
@@ -253,7 +254,21 @@ public class Employe implements Serializable, Comparable<Employe>
 	{
 		return password;
 	}
+	*/
 	
+	  public boolean checkPassword(String password) {
+	        return BCrypt.checkpw(password, this.password);
+	    }
+
+	    public void setPassword(String password) throws SauvegardeImpossible, DateInvalide {
+	        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+	        this.password = hashedPassword;
+	        gestionPersonnel.update(this);
+	    }
+
+	    public String getPassword() {
+	        return password;
+	    }
 	//get set pour id 
 	
 	public void setId (int id)
