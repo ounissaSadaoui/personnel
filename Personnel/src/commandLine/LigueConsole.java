@@ -146,7 +146,7 @@ public class LigueConsole
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						 System.out.println(employe.getNom() + " est maintentant Administrateur de: " + ligue);
+						 System.out.println("'" + employe.getNom() + "' est maintentant Administrateur de: " + ligue);
 });
 	
 	}		

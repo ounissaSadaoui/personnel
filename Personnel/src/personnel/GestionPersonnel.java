@@ -33,7 +33,7 @@ public class GestionPersonnel implements Serializable
 	private static GestionPersonnel gestionPersonnel = null;
 	private SortedSet<Ligue> ligues;
 	private SortedSet<Employe> employes;
-	 Employe root  ; 
+	Employe root  ; 
 	public final static int SERIALIZATION = 1, JDBC = 2,
 			TYPE_PASSERELLE = JDBC;   
 	
@@ -104,10 +104,14 @@ public class GestionPersonnel implements Serializable
 	}
 	
 	//ajout de ça pour match la sortedlIST LIGUE
-	
-	public SortedSet<Employe> getEmployes()
-	{
-		return Collections.unmodifiableSortedSet(employes);
+	public SortedSet<Employe> getEmployes() {
+	    SortedSet<Employe> employesDeCetteLigue = new TreeSet<>();
+	    for (Employe employe : employes) {
+	        if (employe.getLigue().getId() == this.getLigue(employe).getId() ) {
+	            employesDeCetteLigue.add(employe);
+	        }
+	    }
+	    return Collections.unmodifiableSortedSet(employesDeCetteLigue);
 	}
 
 	public Ligue addLigue(String nom) throws SauvegardeImpossible
@@ -153,6 +157,11 @@ public class GestionPersonnel implements Serializable
 	{
 		passerelle.update(employe);
 	}
+	
+	void updateLigueAdministrateur (Ligue ligue, GestionPersonnel gestionPersonnel) throws SauvegardeImpossible 
+	{
+	   passerelle.updateLigueAdministrateur(ligue, gestionPersonnel);	
+	}
 	/**
 	 * Retourne le root (super-utilisateur).
 	 * @return le root.
@@ -165,11 +174,8 @@ public class GestionPersonnel implements Serializable
 	
 	//addRoot sue le modèle de addLigue Quand le root est connu
 	public void addRoot() throws SauvegardeImpossible, DateInvalide {
-	    // Créez un mot de passe haché pour le root
-	    String hashedPassword = BCrypt.hashpw("toor", BCrypt.gensalt());
 
-	    // Utilisez le mot de passe haché lors de la création de l'employé root
-	    root = new Employe(this, null, "root", "", "", hashedPassword, null, null);
+	    root = new Employe(this, null, "root", "", "", "toor", null, null);
 	}
 
 	//ajout de addRoot ici pouir qu'on n'ait pas à appeler new employe depuis le jdbc, quand le root est inconnu

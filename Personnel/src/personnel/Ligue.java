@@ -85,16 +85,20 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	 * @param administrateur le nouvel administrateur de la ligue.
 	 * @throws SauvegardeImpossible 
 	 */
-	
-	public void setAdministrateur(Employe administrateur) throws SauvegardeImpossible
-	{
-		Employe root = gestionPersonnel.getRoot();
-		if (administrateur != root && administrateur.getLigue() != this)
-			throw new DroitsInsuffisants();
-		this.administrateur = administrateur;
-        gestionPersonnel.update(this);
-}
+	public void setAdministrateur(Employe administrateur) throws SauvegardeImpossible {
+	    Employe root = gestionPersonnel.getRoot();
+	    if (administrateur == null) {
+	        this.administrateur = root;
+	        // Mettre à jour la base de données avec le root comme administrateur
+	        gestionPersonnel.updateLigueAdministrateur(this, gestionPersonnel);
+	    } else if (administrateur != root && administrateur.getLigue() != this) {
+	        throw new DroitsInsuffisants();
+	    } else {
+	        this.administrateur = administrateur;
+	    }
+        gestionPersonnel.updateLigueAdministrateur(this, gestionPersonnel);
 
+	}
 	/**
 	 * Retourne les employés de la ligue.
 	 * @return les employés de la ligue dans l'ordre alphabétique.
@@ -105,6 +109,7 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		return Collections.unmodifiableSortedSet(employes);
 	}
 
+	
 	/**
 	 * Ajoute un employé dans la ligue. Cette méthode 
 	 * est le seul moyen de créer un employé.
@@ -134,6 +139,25 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		return null;
 	}*/
 	
+	/*
+	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateArrive, LocalDate dateDepart) throws DateInvalide, SauvegardeImpossible {
+		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrive, dateDepart);
+		employes.add(employe);
+		try {
+			employe.setId(gestionPersonnel.insert(employe));
+		} catch (SauvegardeImpossible e) {
+			e.printStackTrace();
+		}
+		return employe;
+	}
+
+	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateArrive, LocalDate dateDepart, int id) throws DateInvalide, SauvegardeImpossible {
+		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrive, dateDepart);
+		employe.setId(id);
+		employes.add(employe);
+		return employe;
+	}*/
+	
 	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateArrive, LocalDate dateDepart) throws DateInvalide, SauvegardeImpossible {
 		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrive, dateDepart);
 		employes.add(employe);
@@ -151,6 +175,7 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		employes.add(employe);
 		return employe;
 	}
+
      void remove(Employe employe)
 	{
 		employes.remove(employe);

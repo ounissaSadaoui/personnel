@@ -86,11 +86,7 @@ public class JDBC implements Passerelle
 							: null;
                    
 					Employe employee = ligue.addEmploye(nom, prenom, mail, password, date_arrivee, date_depart, id);
-                	ligue.setAdministrateur(employee);
- 
-					if (employee == ligue.getAdministrateur()) {
-	                    	ligue.setAdministrateur(employee);
-	                    }
+
 				}
 			}
 		} catch (SQLException exception) {
@@ -119,46 +115,47 @@ public class JDBC implements Passerelle
 			throw new SauvegardeImpossible(e);
 		}
 	}
+	
+	
 	//insertion des ligues 
 	@Override
-	public int insert(Ligue ligue) throws SauvegardeImpossible 
-	{
-		try 
-		{
-			PreparedStatement instruction;
-			instruction = connection.prepareStatement("insert into ligue (nom) values(?)", Statement.RETURN_GENERATED_KEYS);
-			instruction.setString(1, ligue.getNom());		
-			instruction.executeUpdate();
-			ResultSet id = instruction.getGeneratedKeys();
-			id.next();
-			return id.getInt(1);
-		} 
-		catch (SQLException exception) 
-		{
-			exception.printStackTrace();
-			throw new SauvegardeImpossible(exception);
-		}		
+	public int insert(Ligue ligue) throws SauvegardeImpossible {
+	    try {
+	        PreparedStatement instruction;
+	        instruction = connection.prepareStatement(
+	        		//la requete avec une sous requete met l'id du root comme idEmploye pour la ligue à son insertion
+	                "insert into ligue (nom, idEmploye) select ?, idEmploye from employe where idLigue IS NULL",
+	                Statement.RETURN_GENERATED_KEYS);
+	        instruction.setString(1, ligue.getNom());
+	        instruction.executeUpdate();
+	        ResultSet id = instruction.getGeneratedKeys();
+	        id.next();
+	        return id.getInt(1);
+	    } catch (SQLException exception) {
+	        exception.printStackTrace();
+	        throw new SauvegardeImpossible(exception);
+	    }
 	}
+
 
 	@Override
 	public int insert(Employe employe) throws SauvegardeImpossible {
 		try {
 			PreparedStatement instruction;
 			instruction = connection.prepareStatement(
-					"INSERT INTO employe (nom, prenom, mail, password, dateArrivee, dateDepart,idLigue) VALUES (?,?,?,?,?,?,?)",
+					"INSERT INTO employe (nom, prenom, mail, password, dateArrivee, dateDepart, idLigue) VALUES (?,?,?,?,?,?,?)",
 					Statement.RETURN_GENERATED_KEYS);
 			instruction.setString(1, employe.getNom());
 			instruction.setString(2, employe.getPrenom());
 			instruction.setString(3, employe.getMail());
-	        // Hacher le mot de passe avant de l'assigner
-	        String hashedPassword = BCrypt.hashpw(employe.getPassword(), BCrypt.gensalt());
-	        instruction.setString(4, hashedPassword);
+	        instruction.setString(4, employe.getPassword());
 			instruction.setDate(5, employe.getDateArrivee() == null ? null : Date.valueOf(employe.getDateArrivee()));
 			instruction.setDate(6, employe.getDateDepart() == null ? null : Date.valueOf(employe.getDateDepart()));
 			//cas root, ou il n'a pas de ligue associéé
 			if (employe.getLigue() == null) {
 	            instruction.setNull(7, Types.INTEGER);
 	        } else {//cas autre employe, avec une ligue
+	            System.out.print("cas avec ligue");
 
 	            instruction.setInt(7, employe.getLigue().getId());
 	        }
@@ -249,7 +246,25 @@ public class JDBC implements Passerelle
 	        throw new SauvegardeImpossible(exception);
 	    }
 	}
+	@Override
+	public void updateLigueAdministrateur(Ligue ligue, GestionPersonnel gestionPersonnel) throws SauvegardeImpossible {
+	    String query = "UPDATE ligue SET idEmploye = ? WHERE idLigue = ?";
+	    try (PreparedStatement statement = connection.prepareStatement(query)) {
+	        // Si un administrateur est spécifié pour la ligue, utilisez son ID
+	        if (ligue.getAdministrateur() != null) {
+	            statement.setInt(1, ligue.getAdministrateur().getId());
+	        } else {
+	            // Si aucun administrateur n'est spécifié, utilisez l'ID du root
+	            Employe root = gestionPersonnel.getRoot();
+	            statement.setInt(1, root.getId());
+	        }
+	        statement.setInt(2, ligue.getId());
+	        statement.executeUpdate();
+	    } catch (SQLException e) {
+	        throw new SauvegardeImpossible(e);
+	    }
+	}
+	
 
-	
-	
+
 }
