@@ -45,7 +45,7 @@ public class Ligue extends JFrame {
         
         JButton buttonRenameLigue = new JButton("Renommer la ligue");
         buttonRenameLigue.addActionListener(e -> {
-            RenameLigue newFrame = new RenameLigue();
+            GererLigue newFrame = new GererLigue();
             newFrame.setVisible(true);
         });
         

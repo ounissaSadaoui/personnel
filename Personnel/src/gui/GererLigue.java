@@ -3,9 +3,9 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
-public class RenameLigue extends JFrame {
+public class GererLigue extends JFrame {
 
-    public RenameLigue() {
+    public GererLigue() {
     	
         // Configuration de la nouvelle fenêtre
         super("LDO - Ligues Dynamiques et Organisées");
@@ -36,7 +36,13 @@ public class RenameLigue extends JFrame {
         // Création des boutons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         JButton buttonAdd = new JButton("Ajouter");
+        
         JButton buttonEdit = new JButton("Editer");
+        buttonEdit.addActionListener(e -> {
+            Ligue newFrame = new Ligue();
+            newFrame.setVisible(true);
+        });
+        
         JButton buttonDelete = new JButton("Supprimer");
         buttonPanel.add(buttonAdd);
         buttonPanel.add(buttonEdit);

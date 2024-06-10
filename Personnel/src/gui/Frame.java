@@ -30,7 +30,7 @@ public class Frame extends JFrame {
         // Création d'un bouton pour ouvrir la nouvelle fenêtre
         JButton button = new JButton("Connexion");
         button.addActionListener(e -> {
-            Ligue newFrame = new Ligue();
+            GererLigue newFrame = new GererLigue();
             newFrame.setVisible(true);
         });
 
