@@ -3,25 +3,18 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
-public class Ligue extends JFrame {
+public class ShowLigue extends MainFrame {
 
-    public Ligue() {
-    	
-        // Configuration de la nouvelle fenêtre
-        super("LDO - Ligues Dynamiques et Organisées");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(600, 400);
-        setLocationRelativeTo(null);
+    public ShowLigue() {
 
-        // Création des composants principaux
-        JPanel contentPane = new JPanel(new BorderLayout());
-        setContentPane(contentPane);
-        contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        super("LDO - Ligues Dynamiques et Organisées", 600, 400);
+        
+        JPanel contentPane = getContentPanePanel();
 
         // Ajout titre et sous-titre
-        JLabel titleLabel = new JLabel("Editer : ", SwingConstants.CENTER);
+        JLabel titleLabel = GuiUtils.createLabel("Editer : ", Color.WHITE);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        JLabel subtitleLabel = new JLabel("Administrée par :", SwingConstants.CENTER);
+        JLabel subtitleLabel = GuiUtils.createLabel("Administrée par :", Color.WHITE);
         subtitleLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
         // Création du tableau avec 2 colonnes
@@ -37,14 +30,12 @@ public class Ligue extends JFrame {
         // Création des boutons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         
-        JButton buttonEmploye = new JButton("Gérer les employés");
-        buttonEmploye.addActionListener(e -> {
+        JButton buttonEmploye = GuiUtils.createButton("Gérer les employés", e -> {
             GererEmploye newFrame = new GererEmploye();
             newFrame.setVisible(true);
         });
-        
-        JButton buttonRenameLigue = new JButton("Modifier la ligue");
-        buttonRenameLigue.addActionListener(e -> {
+
+        JButton buttonRenameLigue = GuiUtils.createButton("Modifier la ligue", e -> {
             EditLigue newFrame = new EditLigue();
             newFrame.setVisible(true);
         });
@@ -58,19 +49,12 @@ public class Ligue extends JFrame {
         JPanel titlePanel = new JPanel(new BorderLayout());
         titlePanel.add(titleLabel, BorderLayout.NORTH);
         titlePanel.add(subtitleLabel, BorderLayout.SOUTH);
+        titlePanel.setBackground(GuiUtils.BGcolor);
+        buttonPanel.setBackground(GuiUtils.BGcolor);
 
         contentPane.add(titlePanel, BorderLayout.NORTH);
         contentPane.add(tableScrollPane, BorderLayout.CENTER);
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
-
-        // Configuration des couleurs
-        Color backgroundColor = new Color(12, 23, 40);
-        contentPane.setBackground(backgroundColor);
-        titlePanel.setBackground(backgroundColor);
-        titleLabel.setForeground(Color.WHITE);
-        subtitleLabel.setForeground(Color.WHITE);
-        buttonPanel.setBackground(backgroundColor);
-        table.getTableHeader().setForeground(backgroundColor);
-        table.setForeground(backgroundColor);
+        
     }
 }

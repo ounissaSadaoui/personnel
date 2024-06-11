@@ -3,54 +3,35 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
-public class AddEmploye extends JFrame {
+public class AddEmploye extends MainFrame {
 
     public AddEmploye() {
 
-        // Configuration de la fenêtre
-        super("LDO - Ligues Dynamiques et Organisées");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(600, 400);
-        setLocationRelativeTo(null);
+        super("LDO - Ligues Dynamiques et Organisées", 600, 400);
 
-        // Création des composants
-        JPanel contentPane = new JPanel(new BorderLayout());
-        setContentPane(contentPane);
-        contentPane.setBorder(BorderFactory.createEmptyBorder(0, 60, 0, 60));
-
-        // Ajout logo
-        JLabel logoLabel = new JLabel(new ImageIcon(new ImageIcon("/Users/cynthia/Documents/itic_paris/dev/personnel/Personnel/docs/logo.png")
-                .getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH)));
-        logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        // Récupération du panneau de contenu
+        JPanel contentPane = getContentPanePanel();
 
         // Ajout titre
-        JLabel titleLabel = new JLabel("Ajouter un nouvel employé : ", SwingConstants.CENTER);
+        JLabel titleLabel = GuiUtils.createLabel("Ajouter un nouvel employé : ", Color.WHITE);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         
         // Champs de formulaire
-        JTextField nameField = new JTextField(20);
-        JTextField lastNameField = new JTextField(20);
-        JTextField mailField = new JTextField(20);
-        JTextField pwdField = new JTextField(20);
-        JTextField dateArrField = new JTextField(20);
+        JTextField nameField = GuiUtils.createTextField(20);
+        JTextField lastNameField = GuiUtils.createTextField(20);
+        JTextField mailField = GuiUtils.createTextField(20);
+        JTextField pwdField = GuiUtils.createTextField(20);
+        JTextField dateArrField = GuiUtils.createTextField(20);
 
         // Label des champs 
-        JLabel nameLabel = new JLabel("Nom: ");
-        JLabel lastNameLabel = new JLabel("Prénom: ");
-        JLabel mailLabel = new JLabel("Mail: ");
-        JLabel pwdLabel = new JLabel("Mot de passe: ");
-        JLabel dateArrLabel = new JLabel("Date d'arrivée: ");
-        
-        // Mettre en blanc
-        nameLabel.setForeground(Color.WHITE);
-        lastNameLabel.setForeground(Color.WHITE);
-        mailLabel.setForeground(Color.WHITE);
-        pwdLabel.setForeground(Color.WHITE);
-        dateArrLabel.setForeground(Color.WHITE);
+        JLabel nameLabel = GuiUtils.createLabel("Nom: ", Color.WHITE);
+        JLabel lastNameLabel = GuiUtils.createLabel("Prénom: ", Color.WHITE);
+        JLabel mailLabel = GuiUtils.createLabel("Mail: ", Color.WHITE);
+        JLabel pwdLabel = GuiUtils.createLabel("Mot de passe: ", Color.WHITE);
+        JLabel dateArrLabel = GuiUtils.createLabel("Date d'arrivée: ", Color.WHITE);
         
         // Création d'un bouton pour ouvrir la nouvelle fenêtre
-        JButton button = new JButton("Ajouter l'employé");
-        button.addActionListener(e -> {
+        JButton button = GuiUtils.createButton("Ajouter l'employé", e -> {
             GererEmploye newFrame = new GererEmploye();
             newFrame.setVisible(true);
         });
@@ -61,7 +42,6 @@ public class AddEmploye extends JFrame {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Ajouter les labels et les champs de texte
         gbc.gridx = 0;
         gbc.gridy = 0;
         fieldsPanel.add(nameLabel, gbc);
@@ -101,7 +81,6 @@ public class AddEmploye extends JFrame {
         fieldsPanel.add(button, gbc);
 
         // Ajout des composants au contentPane
-        contentPane.add(logoLabel, BorderLayout.NORTH);
         contentPane.add(titleLabel, BorderLayout.NORTH);
         contentPane.add(fieldsPanel, BorderLayout.CENTER);
         

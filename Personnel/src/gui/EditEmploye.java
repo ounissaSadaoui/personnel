@@ -3,61 +3,40 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
-public class EditEmploye extends JFrame {
+public class EditEmploye extends MainFrame {
 
     public EditEmploye() {
+    	
+        super("LDO - Ligues Dynamiques et Organisées", 600, 400);
 
-        // Configuration de la fenêtre
-        super("LDO - Ligues Dynamiques et Organisées");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(600, 400);
-        setLocationRelativeTo(null);
-
-        // Création des composants
-        JPanel contentPane = new JPanel(new BorderLayout());
-        setContentPane(contentPane);
-        contentPane.setBorder(BorderFactory.createEmptyBorder(0, 60, 0, 60));
-
-        // Ajout logo
-        JLabel logoLabel = new JLabel(new ImageIcon(new ImageIcon("/Users/cynthia/Documents/itic_paris/dev/personnel/Personnel/docs/logo.png")
-                .getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH)));
-        logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        // Récupération du panneau de contenu
+        JPanel contentPane = getContentPanePanel();
 
         // Ajout titre
-        JLabel titleLabel = new JLabel("Modifier : ", SwingConstants.CENTER);
+        JLabel titleLabel = GuiUtils.createLabel("Modifier : ", Color.WHITE);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         
         // Champs de formulaire
-        JTextField nameField = new JTextField(20);
-        JTextField lastNameField = new JTextField(20);
-        JTextField mailField = new JTextField(20);
-        JTextField pwdField = new JTextField(20);
-        JTextField dateArrField = new JTextField(20);
-        JTextField dateDepField = new JTextField(20);
+        JTextField nameField = GuiUtils.createTextField(20);
+        JTextField lastNameField = GuiUtils.createTextField(20);
+        JTextField mailField = GuiUtils.createTextField(20);
+        JTextField pwdField = GuiUtils.createTextField(20);
+        JTextField dateArrField = GuiUtils.createTextField(20);
+        JTextField dateDepField = GuiUtils.createTextField(20);
 
         // Label des champs 
-        JLabel nameLabel = new JLabel("Nom: ");
-        JLabel lastNameLabel = new JLabel("Prénom: ");
-        JLabel mailLabel = new JLabel("Mail: ");
-        JLabel pwdLabel = new JLabel("Mot de passe: ");
-        JLabel dateArrLabel = new JLabel("Date d'arrivée: ");
-        JLabel dateDepLabel = new JLabel("Date de départ: ");
-        
-        // Mettre en blanc
-        nameLabel.setForeground(Color.WHITE);
-        lastNameLabel.setForeground(Color.WHITE);
-        mailLabel.setForeground(Color.WHITE);
-        pwdLabel.setForeground(Color.WHITE);
-        dateArrLabel.setForeground(Color.WHITE);
-        dateDepLabel.setForeground(Color.WHITE);
-        
-        // Création d'un bouton pour ouvrir la nouvelle fenêtre
-        JButton button = new JButton("Valider les modifications");
-        button.addActionListener(e -> {
+        JLabel nameLabel = GuiUtils.createLabel("Nom: ", Color.WHITE);
+        JLabel lastNameLabel = GuiUtils.createLabel("Prénom: ", Color.WHITE);
+        JLabel mailLabel = GuiUtils.createLabel("Mail: ", Color.WHITE);
+        JLabel pwdLabel = GuiUtils.createLabel("Mot de passe: ", Color.WHITE);
+        JLabel dateArrLabel = GuiUtils.createLabel("Date d'arrivée: ", Color.WHITE);
+        JLabel dateDepLabel = GuiUtils.createLabel("Date de départ: ", Color.WHITE);
+
+        // Création bouton 
+        JButton button = GuiUtils.createButton("Valider les modifications", e -> {
             GererEmploye newFrame = new GererEmploye();
             newFrame.setVisible(true);
         });
-        
 
         // Panneau pour les champs de texte et le bouton
         JPanel fieldsPanel = new JPanel(new GridBagLayout());
@@ -111,7 +90,6 @@ public class EditEmploye extends JFrame {
         fieldsPanel.add(button, gbc);
 
         // Ajout des composants au contentPane
-        contentPane.add(logoLabel, BorderLayout.NORTH);
         contentPane.add(titleLabel, BorderLayout.NORTH);
         contentPane.add(fieldsPanel, BorderLayout.CENTER);
         

@@ -3,38 +3,33 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
-public class EditLigue extends JFrame {
+public class EditLigue extends MainFrame {
 
     public EditLigue() {
     	
-        // Configuration de la nouvelle fenêtre
-        super("LDO - Ligues Dynamiques et Organisées");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(600, 400);
-        setLocationRelativeTo(null);
-
-        // Création des composants principaux
-        JPanel contentPane = new JPanel(new BorderLayout());
-        setContentPane(contentPane);
-        contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        super("LDO - Ligues Dynamiques et Organisées", 600, 400);
+        
+        JPanel contentPane = getContentPanePanel();
 
         // Ajout titre et sous-titre
-        JLabel titleLabel = new JLabel("Modifier la ligue : ", SwingConstants.CENTER);
+        JLabel titleLabel = GuiUtils.createLabel("Modifier la ligue : ", Color.WHITE);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         
-        JTextField ligueField = new JTextField("Nom", 20);
+        // Creation champ
+        JLabel nameLabel = GuiUtils.createLabel("Nom :", Color.WHITE);
+        JTextField nameField = GuiUtils.createTextField(20);
 
         // Création des boutons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         
-        JButton buttonLigue = new JButton("Valider les modifications");
-        buttonLigue.addActionListener(e -> {
-            Ligue newFrame = new Ligue();
+        JButton buttonLigue = GuiUtils.createButton("Valider les modifications", e -> {
+            ShowLigue newFrame = new ShowLigue();
             newFrame.setVisible(true);
         });
 
         buttonPanel.add(buttonLigue);
 
+        // Creation du tableau
         JPanel fieldsPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -42,7 +37,9 @@ public class EditLigue extends JFrame {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        fieldsPanel.add(ligueField, gbc);
+        fieldsPanel.add(nameLabel, gbc);
+        gbc.gridy++;
+        fieldsPanel.add(nameField, gbc);
         gbc.gridy++;
         fieldsPanel.add(Box.createVerticalStrut(10), gbc);
         gbc.gridy++;
@@ -54,16 +51,13 @@ public class EditLigue extends JFrame {
         // Ajout des composants au contentPane
         JPanel titlePanel = new JPanel(new BorderLayout());
         titlePanel.add(titleLabel, BorderLayout.NORTH);
+        
+        fieldsPanel.setBackground(GuiUtils.BGcolor);
+        titlePanel.setBackground(GuiUtils.BGcolor);
+        buttonPanel.setBackground(GuiUtils.BGcolor);
 
         contentPane.add(titlePanel, BorderLayout.NORTH);
+        contentPane.add(fieldsPanel, BorderLayout.CENTER);
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
-
-        // Configuration des couleurs
-        Color backgroundColor = new Color(12, 23, 40);
-        contentPane.setBackground(backgroundColor);
-        titlePanel.setBackground(backgroundColor);
-        titleLabel.setForeground(Color.WHITE);
-        buttonPanel.setBackground(backgroundColor);
-        fieldsPanel.setBackground(backgroundColor);
     }
 }

@@ -3,23 +3,17 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
-public class GererEmploye extends JFrame {
+public class GererEmploye extends MainFrame {
 
     public GererEmploye() {
     	
-        // Configuration de la nouvelle fenêtre
-        super("LDO - Ligues Dynamiques et Organisées");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(600, 400);
-        setLocationRelativeTo(null);
+        super("LDO - Ligues Dynamiques et Organisées", 600, 400);
 
-        // Création des composants principaux
-        JPanel contentPane = new JPanel(new BorderLayout());
-        setContentPane(contentPane);
-        contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        // Récupération du panneau de contenu
+        JPanel contentPane = getContentPanePanel();
 
         // Ajout titre et sous-titre
-        JLabel titleLabel = new JLabel("Gérer les employés : ", SwingConstants.CENTER);
+        JLabel titleLabel = GuiUtils.createLabel("Gérer les employés : ", Color.WHITE);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
 
         // Création du tableau avec 5 colonnes
@@ -35,19 +29,18 @@ public class GererEmploye extends JFrame {
 
         // Création des boutons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        JButton buttonAdd = new JButton("Ajouter");
-        buttonAdd.addActionListener(e -> {
+        JButton buttonAdd = GuiUtils.createButton("Ajouter", e -> {
             AddEmploye newFrame = new AddEmploye();
             newFrame.setVisible(true);
         });
-        
-        JButton buttonEdit = new JButton("Modifier");
-        buttonEdit.addActionListener(e -> {
+
+        JButton buttonEdit = GuiUtils.createButton("Modifier", e -> {
             EditEmploye newFrame = new EditEmploye();
             newFrame.setVisible(true);
         });
         
         JButton buttonDelete = new JButton("Supprimer");
+        
         buttonPanel.add(buttonAdd);
         buttonPanel.add(buttonEdit);
         buttonPanel.add(buttonDelete);
@@ -55,18 +48,11 @@ public class GererEmploye extends JFrame {
         // Ajout des composants au contentPane
         JPanel titlePanel = new JPanel(new BorderLayout());
         titlePanel.add(titleLabel, BorderLayout.NORTH);
+        buttonPanel.setBackground(GuiUtils.BGcolor);
+        titlePanel.setBackground(GuiUtils.BGcolor);
 
         contentPane.add(titlePanel, BorderLayout.NORTH);
         contentPane.add(tableScrollPane, BorderLayout.CENTER);
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
-
-        // Configuration des couleurs
-        Color backgroundColor = new Color(12, 23, 40);
-        contentPane.setBackground(backgroundColor);
-        titlePanel.setBackground(backgroundColor);
-        titleLabel.setForeground(Color.WHITE);
-        buttonPanel.setBackground(backgroundColor);
-        table.getTableHeader().setForeground(backgroundColor);
-        table.setForeground(backgroundColor);
     }
 }
