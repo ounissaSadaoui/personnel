@@ -39,7 +39,7 @@ public class Ligue extends JFrame {
         
         JButton buttonEmploye = new JButton("Gérer les employés");
         buttonEmploye.addActionListener(e -> {
-            Employe newFrame = new Employe();
+            GererEmploye newFrame = new GererEmploye();
             newFrame.setVisible(true);
         });
         

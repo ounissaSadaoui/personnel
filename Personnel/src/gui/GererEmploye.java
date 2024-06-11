@@ -3,9 +3,9 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
-public class Employe extends JFrame {
+public class GererEmploye extends JFrame {
 
-    public Employe() {
+    public GererEmploye() {
     	
         // Configuration de la nouvelle fenêtre
         super("LDO - Ligues Dynamiques et Organisées");
@@ -36,10 +36,20 @@ public class Employe extends JFrame {
         // Création des boutons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         JButton buttonAdd = new JButton("Ajouter");
-        JButton buttonRename = new JButton("Renommer");
+        buttonAdd.addActionListener(e -> {
+            AddEmploye newFrame = new AddEmploye();
+            newFrame.setVisible(true);
+        });
+        
+        JButton buttonEdit = new JButton("Modifier");
+        buttonEdit.addActionListener(e -> {
+            EditEmploye newFrame = new EditEmploye();
+            newFrame.setVisible(true);
+        });
+        
         JButton buttonDelete = new JButton("Supprimer");
         buttonPanel.add(buttonAdd);
-        buttonPanel.add(buttonRename);
+        buttonPanel.add(buttonEdit);
         buttonPanel.add(buttonDelete);
 
         // Ajout des composants au contentPane
