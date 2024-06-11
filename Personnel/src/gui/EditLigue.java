@@ -3,9 +3,9 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
-public class GererLigue extends JFrame {
+public class EditLigue extends JFrame {
 
-    public GererLigue() {
+    public EditLigue() {
     	
         // Configuration de la nouvelle fenêtre
         super("LDO - Ligues Dynamiques et Organisées");
@@ -18,46 +18,44 @@ public class GererLigue extends JFrame {
         setContentPane(contentPane);
         contentPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Ajout titre
-        JLabel titleLabel = new JLabel("Gérer les ligues : ", SwingConstants.CENTER);
+        // Ajout titre et sous-titre
+        JLabel titleLabel = new JLabel("Modifier la ligue : ", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-
-        // Création du tableau avec 2 colonnes
-        String[] columnNames = {"Nom de la ligue", "Administrée par : "};
-        Object[][] data = {
-            {"Donnée 1", "Donnée 2"},
-            {"Donnée 1", "Donnée 2"},
-            {"Donnée 1", "Donnée 2"},
-            {"Donnée 1", "Donnée 2"}
-        };
-        JTable table = new JTable(data, columnNames);
-        JScrollPane tableScrollPane = new JScrollPane(table);
+        
+        JTextField ligueField = new JTextField("Nom", 20);
 
         // Création des boutons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        JButton buttonAdd = new JButton("Ajouter");
-        buttonAdd.addActionListener(e -> {
-            AddLigue newFrame = new AddLigue();
-            newFrame.setVisible(true);
-        }); 
         
-        JButton buttonEdit = new JButton("Editer");
-        buttonEdit.addActionListener(e -> {
+        JButton buttonLigue = new JButton("Valider les modifications");
+        buttonLigue.addActionListener(e -> {
             Ligue newFrame = new Ligue();
             newFrame.setVisible(true);
         });
-        
-        JButton buttonDelete = new JButton("Supprimer");
-        buttonPanel.add(buttonAdd);
-        buttonPanel.add(buttonEdit);
-        buttonPanel.add(buttonDelete);
 
+        buttonPanel.add(buttonLigue);
+
+        JPanel fieldsPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        fieldsPanel.add(ligueField, gbc);
+        gbc.gridy++;
+        fieldsPanel.add(Box.createVerticalStrut(10), gbc);
+        gbc.gridy++;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.CENTER;
+        
+        contentPane.add(fieldsPanel, BorderLayout.CENTER);
+        
         // Ajout des composants au contentPane
         JPanel titlePanel = new JPanel(new BorderLayout());
         titlePanel.add(titleLabel, BorderLayout.NORTH);
 
         contentPane.add(titlePanel, BorderLayout.NORTH);
-        contentPane.add(tableScrollPane, BorderLayout.CENTER);
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
 
         // Configuration des couleurs
@@ -66,7 +64,6 @@ public class GererLigue extends JFrame {
         titlePanel.setBackground(backgroundColor);
         titleLabel.setForeground(Color.WHITE);
         buttonPanel.setBackground(backgroundColor);
-        table.getTableHeader().setForeground(backgroundColor);
-        table.setForeground(backgroundColor);
+        fieldsPanel.setBackground(backgroundColor);
     }
 }

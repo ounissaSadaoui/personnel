@@ -3,9 +3,9 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
-public class Frame extends JFrame {
+public class AddLigue extends JFrame {
 
-    public Frame() {
+    public AddLigue() {
 
         // Configuration de la fenêtre
         super("LDO - Ligues Dynamiques et Organisées");
@@ -23,18 +23,21 @@ public class Frame extends JFrame {
                 .getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH)));
         logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
+        // Ajout titre et sous-titre
+        JLabel titleLabel = new JLabel("Ajouter une nouvelle ligue : ", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        
         // Champs de connexion
-        JTextField userField = new JTextField("Nom", 20);
-        JTextField mdpField = new JTextField("Mot de passe", 20);
+        JTextField ligueField = new JTextField("Nom", 20);
 
         // Création d'un bouton pour ouvrir la nouvelle fenêtre
-        JButton button = new JButton("Connexion");
+        JButton button = new JButton("Ajouter la ligue");
         button.addActionListener(e -> {
             GererLigue newFrame = new GererLigue();
             newFrame.setVisible(true);
         });
 
-        button.setPreferredSize(new Dimension(200, 30));
+        button.setPreferredSize(new Dimension(100, 30));
         contentPane.add(button, BorderLayout.CENTER);
         setContentPane(contentPane);
 
@@ -46,9 +49,7 @@ public class Frame extends JFrame {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        fieldsPanel.add(userField, gbc);
-        gbc.gridy++;
-        fieldsPanel.add(mdpField, gbc);
+        fieldsPanel.add(ligueField, gbc);
         gbc.gridy++;
         fieldsPanel.add(Box.createVerticalStrut(10), gbc);
         gbc.gridy++;
@@ -59,10 +60,17 @@ public class Frame extends JFrame {
         contentPane.add(logoLabel, BorderLayout.NORTH);
         contentPane.add(fieldsPanel, BorderLayout.CENTER);
 
+        JPanel titlePanel = new JPanel(new BorderLayout());
+        titlePanel.add(titleLabel, BorderLayout.NORTH);
+
+        contentPane.add(titlePanel, BorderLayout.NORTH);
+        
         // Configuration des couleurs
         Color backgroundColor = new Color(12, 23, 40);
         contentPane.setBackground(backgroundColor);
         fieldsPanel.setBackground(backgroundColor);
+        titlePanel.setBackground(backgroundColor);
+        titleLabel.setForeground(Color.WHITE);
     }
 
     public static void main(String[] args) {
