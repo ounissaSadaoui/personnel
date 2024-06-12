@@ -34,69 +34,93 @@ public class JDBC implements Passerelle
 			System.out.println(e);
 		}
 	}
-
+	
+	
 	public GestionPersonnel getGestionPersonnel() throws SauvegardeImpossible, DateInvalide {
-
-		GestionPersonnel gestionPersonnel = new GestionPersonnel();
-		try {
+	    GestionPersonnel gestionPersonnel = new GestionPersonnel();
+	    try {
 			// Requête SQL pour sélectionner les informations du root depuis la base de données
 	        String requeteRoot = "SELECT * FROM employe WHERE idLigue IS NULL";
 	        PreparedStatement instruction = connection.prepareStatement(requeteRoot);
 	        ResultSet resultSet = instruction.executeQuery();
 
 	        if (resultSet.next()) {
-	        	    String nom = resultSet.getString("nom");
-	                String password = resultSet.getString("password");
-	                int id = resultSet.getInt("idEmploye");
-	                gestionPersonnel.addRoot(id, nom, password, "", null, null);
-	        } else if (!resultSet.next()) {
-		            gestionPersonnel.addRoot();
-	            } else {
-	                throw new SauvegardeImpossible(new RuntimeException("Sauvegarde Impossible !!"));
+	            String nom = resultSet.getString("nom");
+	            String password = resultSet.getString("password");
+	            int id = resultSet.getInt("idEmploye");
+	            gestionPersonnel.addRoot(id, nom, password, "", null, null);
+	        } else {
+	            gestionPersonnel.addRoot();
+	        }
+
+	        // fin de la requete pour le root
+	        resultSet.close();
+	        instruction.close();
+
+	        // Requete pour récupérer les ligues
+	        String requeteLigue = "SELECT * FROM ligue";
+	        Statement instructionLigue = connection.createStatement();
+	        ResultSet ligues = instructionLigue.executeQuery(requeteLigue);
+
+	        while (ligues.next()) {
+	            int ligueId = ligues.getInt("idLigue");
+	            String ligueNom = ligues.getString("nom");
+	            gestionPersonnel.addLigue(ligueId, ligueNom);
+
+	            // récupération des employés de la ligue actuelle
+	            PreparedStatement req = connection.prepareStatement("SELECT * FROM employe WHERE idLigue = ?");
+	            req.setInt(1, ligueId);
+	            ResultSet employesResultSet = req.executeQuery();
+	            Ligue ligue = null;
+
+	            // on s'assure qu'on est bien sur la bonne ligue 
+	            
+	            for (Ligue l : gestionPersonnel.getLigues()) {
+	                if (l.getId() == ligueId) {
+	                    ligue = l;
+	                    break;
+	                }
 	            }
 
-	        //resultSet.close();
-	        //instruction.close();
-			String requeteLigue = "SELECT * FROM ligue";
-			Statement instructionLigue = connection.createStatement();
-			ResultSet ligues = instructionLigue.executeQuery(requeteLigue);
+	            if (ligue == null) {
+	                throw new RuntimeException("Cette ligue n'existe pas : " + ligueId);
+	            }
+                //parcours des employes de la ligue
+	            while (employesResultSet.next()) {
+	                int employeId = employesResultSet.getInt("idEmploye");
+	                String employeNom = employesResultSet.getString("nom");
+	                String employePrenom = employesResultSet.getString("prenom");
+	                String employeMail = employesResultSet.getString("mail");
+	                String employePassword = employesResultSet.getString("password");
+	                LocalDate dateArrivee = employesResultSet.getDate("dateArrivee") != null ?
+	                        employesResultSet.getDate("dateArrivee").toLocalDate() : null;
+	                LocalDate dateDepart = employesResultSet.getDate("dateDepart") != null ?
+	                        employesResultSet.getDate("dateDepart").toLocalDate() : null;
 
-			while (ligues.next()) {
+	                Employe employe = ligue.addEmploye(employeNom, employePrenom, employeMail, employePassword,
+	                        dateArrivee, dateDepart, employeId);
 
-				gestionPersonnel.addLigue(ligues.getInt("idLigue"), ligues.getString("nom"));
+	                // vérification de si l'employé est l'admin
+	                if (ligues.getInt("idEmploye") == employeId) {
+	                    ligue.setAdministrateur(employe);
+	                }
+	            }
+	            employesResultSet.close();
+	            req.close();
+	        }
 
-				PreparedStatement req = connection.prepareStatement("SELECT * FROM employe WHERE idLigue = ?");
+	        // fermeture finale
+	        ligues.close();
+	        instructionLigue.close();
 
-				req.setInt(1, ligues.getInt("idLigue"));
-				ResultSet employe = req.executeQuery();
-				Ligue ligue = gestionPersonnel.getLigues().last();
+	    } catch (SQLException exception) {
+	        exception.printStackTrace();
+	        throw new SauvegardeImpossible(exception);
+	    }
 
-				while (employe.next()) {
-
-					int id = employe.getInt("idEmploye");
-					String nom = employe.getString("nom");
-					String prenom = employe.getString("prenom");
-					String mail = employe.getString("mail");
-					String password = employe.getString("password");
-					LocalDate date_arrivee = employe.getDate("dateArrivee") != null
-							? LocalDate.parse(employe.getString("dateArrivee"))
-							: null;
-					LocalDate date_depart = employe.getDate("dateDepart") != null
-							? LocalDate.parse(employe.getString("dateDepart"))
-							: null;
-                   
-					Employe employee = ligue.addEmploye(nom, prenom, mail, password, date_arrivee, date_depart, id);
-
-				}
-			}
-		} catch (SQLException exception) {
-			exception.printStackTrace();
-			throw new SauvegardeImpossible(exception);
-		}
-
-		return gestionPersonnel;
+	    return gestionPersonnel;
 	}
-	
+
 	@Override
 	public void sauvegarderGestionPersonnel(GestionPersonnel gestionPersonnel) throws SauvegardeImpossible 
 	{

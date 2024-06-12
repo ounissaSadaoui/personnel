@@ -1,10 +1,12 @@
 package gui;
-import javax.swing.*;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-
 import jdbc.JDBC;
+import personnel.DateInvalide;
+import personnel.SauvegardeImpossible;
+import personnel.GestionPersonnel;
 
 public class Frame extends MainFrame {
 
@@ -31,7 +33,13 @@ public class Frame extends MainFrame {
         JLabel mdpLabel = GuiUtils.createLabel("Mot de passe :", Color.WHITE);
 
         // Création d'un bouton pour ouvrir la nouvelle fenêtre
-        JButton button = GuiUtils.createButton("Connexion", this::handleLogin);
+        JButton button = GuiUtils.createButton("Connexion", arg0 -> {
+            try {
+                handleLogin(arg0);
+            } catch (SauvegardeImpossible | DateInvalide e) {
+                e.printStackTrace();
+            }
+        });
 
         // Panneau pour les champs de texte et le bouton
         JPanel fieldsPanel = new JPanel(new GridBagLayout());
@@ -65,21 +73,18 @@ public class Frame extends MainFrame {
         contentPane.add(fieldsPanel, BorderLayout.CENTER);
     }
 
-    private void handleLogin(ActionEvent e) {
+    private void handleLogin(ActionEvent e) throws SauvegardeImpossible, DateInvalide {
         String username = userField.getText();
         String password = new String(mdpField.getPassword());
 
         JDBC jdbc = new JDBC();
         if (jdbc.authenticateUser(username, password)) {
-        	System.out.println(username + "  " + password);
-
-            GererLigue newFrame = new GererLigue();
+            GestionPersonnel gestionPersonnel = jdbc.getGestionPersonnel();
+            GererLigue newFrame = new GererLigue(gestionPersonnel);
             newFrame.setVisible(true);
             this.dispose(); // Fermer la fenêtre de connexion
         } else {
             // Connexion échouée
-        	System.out.println(username + "  " + password);
-
             JOptionPane.showMessageDialog(this, "Nom d'utilisateur ou mot de passe incorrect", "Erreur de connexion", JOptionPane.ERROR_MESSAGE);
         }
     }
