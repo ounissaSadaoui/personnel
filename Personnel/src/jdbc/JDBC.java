@@ -265,6 +265,22 @@ public class JDBC implements Passerelle
 	    }
 	}
 	
+	//
+	public boolean authenticateUser(String username, String password) {
+	    String query = "SELECT password FROM employe WHERE nom = ?";
+	    try (PreparedStatement statement = connection.prepareStatement(query)) {
+	        statement.setString(1, username);
+	        ResultSet resultSet = statement.executeQuery();
+	        if (resultSet.next()) {
+	            String storedPassword = resultSet.getString("password");
+	            return password.equals(storedPassword);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
+	
 
 
 }

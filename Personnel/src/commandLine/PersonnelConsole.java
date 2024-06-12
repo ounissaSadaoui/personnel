@@ -74,9 +74,6 @@ public class PersonnelConsole
 		return ok;
 	}
 	
-	
-	
-
 	public static void main(String[] args) throws SauvegardeImpossible, DateInvalide
 	{
 	    String url = "jdbc:mysql://localhost:3306/projet_java?serverTimezone=Europe/Paris";

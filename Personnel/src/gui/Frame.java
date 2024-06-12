@@ -1,14 +1,19 @@
 package gui;
+import javax.swing.*;
 
 import java.awt.*;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
+
+import jdbc.JDBC;
 
 public class Frame extends MainFrame {
 
-    public Frame() {
+    private JTextField userField;
+    private JPasswordField mdpField;
 
+    public Frame() {
         super("LDO - Ligues Dynamiques et Organisées", 600, 400);
-        
+
         JPanel contentPane = getContentPanePanel();
         contentPane.setBorder(BorderFactory.createEmptyBorder(0, 60, 0, 60));
 
@@ -18,18 +23,15 @@ public class Frame extends MainFrame {
         logoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         // Champs de formulaire
-        JTextField userField = GuiUtils.createTextField(20);
-        JTextField mdpField = GuiUtils.createTextField(20);
-        
+        userField = GuiUtils.createTextField(20);
+        mdpField = new JPasswordField(20);
+
         // Label des champs
         JLabel userLabel = GuiUtils.createLabel("Nom :", Color.WHITE);
         JLabel mdpLabel = GuiUtils.createLabel("Mot de passe :", Color.WHITE);
 
         // Création d'un bouton pour ouvrir la nouvelle fenêtre
-        JButton button = GuiUtils.createButton("Connexion", e -> {
-            GererLigue newFrame = new GererLigue();
-            newFrame.setVisible(true);
-        });
+        JButton button = GuiUtils.createButton("Connexion", this::handleLogin);
 
         // Panneau pour les champs de texte et le bouton
         JPanel fieldsPanel = new JPanel(new GridBagLayout());
@@ -56,11 +58,30 @@ public class Frame extends MainFrame {
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.CENTER;
         fieldsPanel.add(Box.createVerticalStrut(10), gbc);
-        
+
         gbc.gridy++;
         fieldsPanel.add(button, gbc);
-        
+
         contentPane.add(fieldsPanel, BorderLayout.CENTER);
+    }
+
+    private void handleLogin(ActionEvent e) {
+        String username = userField.getText();
+        String password = new String(mdpField.getPassword());
+
+        JDBC jdbc = new JDBC();
+        if (jdbc.authenticateUser(username, password)) {
+        	System.out.println(username + "  " + password);
+
+            GererLigue newFrame = new GererLigue();
+            newFrame.setVisible(true);
+            this.dispose(); // Fermer la fenêtre de connexion
+        } else {
+            // Connexion échouée
+        	System.out.println(username + "  " + password);
+
+            JOptionPane.showMessageDialog(this, "Nom d'utilisateur ou mot de passe incorrect", "Erreur de connexion", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public static void main(String[] args) {
