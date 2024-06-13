@@ -1,31 +1,34 @@
+
 package gui;
 
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import personnel.GestionPersonnel;
+import personnel.SauvegardeImpossible;
 
 public class AddLigue extends MainFrame {
 
-    public AddLigue() {
+    private GestionPersonnel gestionPersonnel;
+    private JTextField ligueField;
 
+    public AddLigue(GestionPersonnel gestionPersonnel) {
         super("LDO - Ligues Dynamiques et Organisées", 600, 400);
+        this.gestionPersonnel = gestionPersonnel;
 
         JPanel contentPane = getContentPanePanel();
 
         // Ajout titre
         JLabel titleLabel = GuiUtils.createLabel("Ajouter une nouvelle ligue : ", Color.WHITE);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        
+
         // Champs de connexion
-        JTextField ligueField = GuiUtils.createTextField(20);
-        
-        // Label du champs
+        ligueField = GuiUtils.createTextField(20);
+
+        // Label du champ
         JLabel nomLabel = GuiUtils.createLabel("Nom :", Color.WHITE);
 
-        // Création d'un bouton pour ouvrir la nouvelle fenêtre
-        JButton button = GuiUtils.createButton("Ajouter la ligue", e -> {
-            GererLigue newFrame = new GererLigue();
-            newFrame.setVisible(true);
-        });
+        // Création d'un bouton pour ajouter la ligue
+        JButton button = GuiUtils.createButton("Ajouter la ligue", this::handleAddLigue);
 
         // Panneau pour les champs de texte et le bouton
         JPanel fieldsPanel = new JPanel(new GridBagLayout());
@@ -47,12 +50,31 @@ public class AddLigue extends MainFrame {
 
         contentPane.add(titleLabel, BorderLayout.NORTH);
         contentPane.add(fieldsPanel, BorderLayout.CENTER);
-        
+
         // Configuration des couleurs
         Color backgroundColor = new Color(12, 23, 40);
         contentPane.setBackground(backgroundColor);
         fieldsPanel.setBackground(backgroundColor);
         titleLabel.setForeground(Color.WHITE);
+    }
+
+    private void handleAddLigue(ActionEvent e) {
+        String ligueName = ligueField.getText();
+
+        if (ligueName.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Le nom de la ligue ne peut pas être vide", "Erreur", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            gestionPersonnel.addLigue(ligueName);
+
+            JOptionPane.showMessageDialog(this, "Ligue ajoutée avec succès", "Succès", JOptionPane.INFORMATION_MESSAGE);
+            new GererLigue(gestionPersonnel).setVisible(true);
+            this.dispose();
+        } catch (SauvegardeImpossible ex) {
+            JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout de la ligue : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public static void main(String[] args) {

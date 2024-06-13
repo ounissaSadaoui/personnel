@@ -1,20 +1,19 @@
 package gui;
 
-import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import personnel.GestionPersonnel;
 import personnel.Ligue;
 import personnel.Employe;
 
 public class GererLigue extends MainFrame {
-    
+
     private GestionPersonnel gestionPersonnel;
     private DefaultTableModel tableModel;
 
     public GererLigue(GestionPersonnel gestionPersonnel) {
         super("LDO - Ligues Dynamiques et Organisées", 600, 400);
-
         this.gestionPersonnel = gestionPersonnel;
 
         JPanel contentPane = getContentPanePanel();
@@ -39,8 +38,9 @@ public class GererLigue extends MainFrame {
         GuiUtils.configurePanel(buttonPanel, new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         JButton buttonAdd = GuiUtils.createButton("Ajouter", e -> {
-            AddLigue newFrame = new AddLigue();
+            AddLigue newFrame = new AddLigue(gestionPersonnel);
             newFrame.setVisible(true);
+            this.dispose();
         });
         JButton buttonEdit = GuiUtils.createButton("Editer", e -> {
             ShowLigue newFrame = new ShowLigue();
