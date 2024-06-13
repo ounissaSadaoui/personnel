@@ -189,13 +189,16 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	
 	public void remove() throws SauvegardeImpossible
 	{
-		if (this.getEmployes()== null) {
+		SortedSet<Employe> personnel = this.getEmployes();
+		if (personnel.isEmpty()) {
+
 			gestionPersonnel.delete(this);
 		}else {
-			SortedSet<Employe> personnel = gestionPersonnel.getEmployes();
 			while (!(personnel.size() == 0)) {
 				personnel.first().remove();
 			}
+			gestionPersonnel.delete(this);
+
 		}
 	}
 	
