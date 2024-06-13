@@ -10,6 +10,7 @@ import java.awt.*;
 import personnel.GestionPersonnel;
 import personnel.Ligue;
 import personnel.SauvegardeImpossible;
+import personnel.DateInvalide;
 import personnel.Employe;
 
 public class GererLigue extends MainFrame {
@@ -18,7 +19,10 @@ public class GererLigue extends MainFrame {
     private DefaultTableModel tableModel;
     private JTable table;
     private JDBC jdbc;
+	private boolean isRoot;
 
+    
+    
     public GererLigue(GestionPersonnel gestionPersonnel) {
         super("LDO - Ligues Dynamiques et Organisées", 600, 400);
         this.gestionPersonnel = gestionPersonnel;
@@ -50,7 +54,7 @@ public class GererLigue extends MainFrame {
             this.dispose();
         });
 
-        JButton buttonEdit = GuiUtils.createButton("Editer", e -> {
+        JButton buttonEdit = GuiUtils.createButton("Renommer", e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow != -1) {
                 String nomLigue = (String) table.getValueAt(selectedRow, 0); // Nom de la ligue sélectionnée
@@ -60,9 +64,29 @@ public class GererLigue extends MainFrame {
                     editFrame.setVisible(true);
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une ligue à éditer.", "Aucune sélection", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une ligue à renommer.", "Aucune sélection", JOptionPane.WARNING_MESSAGE);
             }
         });
+        
+     // Gérer les employés de la ligue
+        JButton buttonGestion = GuiUtils.createButton("Gérer les employés", e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow != -1) {
+                String nomLigue = (String) table.getValueAt(selectedRow, 0); // Nom de la ligue sélectionnée
+                Ligue selectedLigue = findLigueByName(nomLigue);
+                if (selectedLigue != null) {
+                    try {
+                        GererEmploye gererEmployeFrame = new GererEmploye(selectedLigue);
+                        gererEmployeFrame.setVisible(true);
+                    } catch (DateInvalide | SauvegardeImpossible e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une ligue.", "Aucune sélection", JOptionPane.WARNING_MESSAGE);
+            }
+        });
+
 //suppression d'une ligue
         JButton deleteButton = new JButton("Supprimer ");
         deleteButton.addActionListener(e -> {
@@ -101,6 +125,7 @@ public class GererLigue extends MainFrame {
         buttonPanel1.add(buttonAdd);
         buttonPanel1.add(buttonEdit);
         buttonPanel1.add(deleteButton);
+        buttonPanel1.add(buttonGestion);
         contentPane.add(buttonPanel1, BorderLayout.SOUTH);
     }
 

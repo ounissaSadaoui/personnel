@@ -179,7 +179,6 @@
 				if (employe.getLigue() == null) {
 		            instruction.setNull(7, Types.INTEGER);
 		        } else {//cas autre employe, avec une ligue
-		            System.out.print("cas avec ligue");
 	
 		            instruction.setInt(7, employe.getLigue().getId());
 		        }
@@ -294,7 +293,7 @@
 		
 		//
 		public boolean authenticateUser(String username, String password) {
-		    String query = "SELECT password FROM employe WHERE nom = ?";
+		    String query = "SELECT password, idLigue FROM employe WHERE nom = ? ";
 		    try (PreparedStatement statement = connection.prepareStatement(query)) {
 		        statement.setString(1, username);
 		        ResultSet resultSet = statement.executeQuery();

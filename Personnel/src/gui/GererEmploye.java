@@ -1,58 +1,97 @@
 package gui;
 
-import java.awt.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+import personnel.GestionPersonnel;
+import personnel.Ligue;
+import personnel.SauvegardeImpossible;
+import personnel.DateInvalide;
+import personnel.Employe;
+
+import java.awt.*;
+import java.time.LocalDate;
+import java.util.SortedSet;
 
 public class GererEmploye extends MainFrame {
 
-    public GererEmploye() {
-    	
-        super("LDO - Ligues Dynamiques et Organisées", 600, 400);
+    private GestionPersonnel gestionPersonnel;
+    private DefaultTableModel tableModel;
+    private JTable table;
+    private Ligue ligue;
 
-        // Récupération du panneau de contenu
+    public GererEmploye(Ligue ligue) throws DateInvalide, SauvegardeImpossible {
+        super("Gérer les employés", 600, 400);
+        this.gestionPersonnel = GestionPersonnel.getGestionPersonnel();
+        this.ligue = ligue;
+
         JPanel contentPane = getContentPanePanel();
 
-        // Ajout titre et sous-titre
-        JLabel titleLabel = GuiUtils.createLabel("Gérer les employés : ", Color.WHITE);
+        // Ajout titre
+        JLabel titleLabel = GuiUtils.createLabel("Gérer les employés : " + ligue.getNom(), Color.WHITE);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        contentPane.add(titleLabel, BorderLayout.NORTH);
 
-        // Création du tableau avec 5 colonnes
-        String[] columnNames = {"Nom", "Prénom", "Mail", "Date d'arrivée", "Date de départ"};
-        Object[][] data = {
-            {"Donnée 1", "Donnée 2", "Donnée 3", "Donnée 4", "Donnée 5"},
-            {"Donnée 1", "Donnée 2", "Donnée 3", "Donnée 4", "Donnée 5"},
-            {"Donnée 1", "Donnée 2", "Donnée 3", "Donnée 4", "Donnée 5"},
-            {"Donnée 1", "Donnée 2", "Donnée 3", "Donnée 4", "Donnée 5"}
-        };
-        JTable table = new JTable(data, columnNames);
+        // Création du tableau avec les colonnes
+        String[] columnNames = {"Nom", "Prénom", "Email", "Date d'arrivée", "Date de départ"};
+        tableModel = new DefaultTableModel(columnNames, 0);
+        table = new JTable(tableModel);
         JScrollPane tableScrollPane = new JScrollPane(table);
+        contentPane.add(tableScrollPane, BorderLayout.CENTER);
+
+        // Charger les données des employés
+        loadEmployesData();
 
         // Création des boutons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        GuiUtils.configurePanel(buttonPanel, new FlowLayout(FlowLayout.CENTER, 10, 10));
+
         JButton buttonAdd = GuiUtils.createButton("Ajouter", e -> {
-            AddEmploye newFrame = new AddEmploye();
-            newFrame.setVisible(true);
+            // Ajouter un nouvel employé a suivre
         });
 
         JButton buttonEdit = GuiUtils.createButton("Modifier", e -> {
-            EditEmploye newFrame = new EditEmploye();
-            newFrame.setVisible(true);
         });
-        
-        JButton buttonDelete = new JButton("Supprimer");
-        
+
+        JButton buttonDelete = GuiUtils.createButton("Supprimer", e -> {
+        });
+
         buttonPanel.add(buttonAdd);
         buttonPanel.add(buttonEdit);
         buttonPanel.add(buttonDelete);
-
-        // Ajout des composants au contentPane
-        JPanel titlePanel = new JPanel(new BorderLayout());
-        titlePanel.add(titleLabel, BorderLayout.NORTH);
-        buttonPanel.setBackground(GuiUtils.BGcolor);
-        titlePanel.setBackground(GuiUtils.BGcolor);
-
-        contentPane.add(titlePanel, BorderLayout.NORTH);
-        contentPane.add(tableScrollPane, BorderLayout.CENTER);
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    private void loadEmployesData() {
+        // Vider le modèle de table avant de le remplir à nouveau
+        tableModel.setRowCount(0);
+
+        try {
+            SortedSet<Employe> employes = ligue.getEmployes();
+
+            // Vérifier qu'il y a des employés à afficher
+            if (employes != null && !employes.isEmpty()) {
+                for (Employe employe : employes) {
+                    try {
+                        // Récupérer les données de l'employé
+                        String nom = employe.getNom();
+                        String prenom = employe.getPrenom();
+                        String mail = employe.getMail();
+                        LocalDate dateArrivee = employe.getDateArrivee();
+                        LocalDate dateDepart = employe.getDateDepart();
+
+                        // Ajouter une ligne au modèle de table
+                        tableModel.addRow(new Object[]{nom, prenom, mail, dateArrivee, dateDepart});
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(this, "Erreur à la récupération des données.", "Aucune donnée", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Aucun Employé à afficher.", "Ligue vide", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

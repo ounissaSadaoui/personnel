@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import jdbc.JDBC;
 import personnel.DateInvalide;
+import personnel.Employe;
 import personnel.SauvegardeImpossible;
 import personnel.GestionPersonnel;
 
@@ -78,6 +79,7 @@ public class Frame extends MainFrame {
         String password = new String(mdpField.getPassword());
 
         JDBC jdbc = new JDBC();
+        
         if (jdbc.authenticateUser(username, password)) {
             GestionPersonnel gestionPersonnel = jdbc.getGestionPersonnel();
             GererLigue newFrame = new GererLigue(gestionPersonnel);
@@ -88,6 +90,8 @@ public class Frame extends MainFrame {
             JOptionPane.showMessageDialog(this, "Nom d'utilisateur ou mot de passe incorrect", "Erreur de connexion", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
