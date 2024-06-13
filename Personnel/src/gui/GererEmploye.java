@@ -22,6 +22,8 @@ public class GererEmploye extends MainFrame {
     private JTable table;
     private Ligue ligue;
     private JDBC jdbc;
+    private JTable employesTable;
+    
 
     public GererEmploye(Ligue ligue) throws DateInvalide, SauvegardeImpossible {
         super("Gérer les employés", 600, 400);
@@ -52,9 +54,22 @@ public class GererEmploye extends MainFrame {
         JButton buttonAdd = GuiUtils.createButton("Ajouter", e -> {
             new AddEmploye(ligue, null).setVisible(true);
         });
-
-        JButton buttonEdit = GuiUtils.createButton("Modifier", e -> {
-        });
+       
+        //mofifer l'employe selectionné
+        JButton editButton = GuiUtils.createButton("Modifier", e -> {
+        	 int selectedRow = table.getSelectedRow();
+             if (selectedRow != -1) {
+                 String nomEmploye = (String) table.getValueAt(selectedRow, 0);
+                 Employe selectedEmploye = findEmployeByName(nomEmploye);
+                 new EditEmploye(selectedEmploye).setVisible(true);
+                 
+             } else {
+                 JOptionPane.showMessageDialog(this, "Veuillez sélectionner un employé à supprimer.", "Aucun employé sélectionné", JOptionPane.WARNING_MESSAGE);
+             }
+         });
+        
+        
+       //supprimer l'employé selectionné
 
         JButton buttonDelete = GuiUtils.createButton("Supprimer", e -> {
             int selectedRow = table.getSelectedRow();
@@ -83,12 +98,23 @@ public class GererEmploye extends MainFrame {
         });
 
         buttonPanel.add(buttonAdd);
-        buttonPanel.add(buttonEdit);
+        buttonPanel.add(editButton);
         buttonPanel.add(buttonDelete);
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    void loadEmployesData() {
+    private Employe getSelectedEmploye(int rowIndex) {
+        int employeId = (int) employesTable.getValueAt(rowIndex, 0); // Supposons que l'ID est dans la première colonne
+        for (Ligue ligue : gestionPersonnel.getLigues()) {
+            for (Employe employe : ligue.getEmployes()) {
+                if (employe.getId() == employeId) {
+                    return employe;
+                }
+            }
+        }
+        return null;
+    }
+	void loadEmployesData() {
         // Vider le modèle de table avant de le remplir à nouveau
         tableModel.setRowCount(0);
 
