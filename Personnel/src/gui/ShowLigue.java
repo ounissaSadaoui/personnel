@@ -36,7 +36,7 @@ public class ShowLigue extends MainFrame {
         });
 
         JButton buttonRenameLigue = GuiUtils.createButton("Modifier la ligue", e -> {
-            EditLigue newFrame = new EditLigue();
+            EditLigue newFrame = new EditLigue(null);
             newFrame.setVisible(true);
         });
         

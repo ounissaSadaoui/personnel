@@ -1,3 +1,4 @@
+
 package gui;
 
 import javax.swing.*;
@@ -11,6 +12,7 @@ public class GererLigue extends MainFrame {
 
     private GestionPersonnel gestionPersonnel;
     private DefaultTableModel tableModel;
+    private JTable table;
 
     public GererLigue(GestionPersonnel gestionPersonnel) {
         super("LDO - Ligues Dynamiques et Organisées", 600, 400);
@@ -26,7 +28,7 @@ public class GererLigue extends MainFrame {
         // Création du tableau avec 2 colonnes
         String[] columnNames = {"Nom de la ligue", "Administrée par"};
         tableModel = new DefaultTableModel(columnNames, 0);
-        JTable table = new JTable(tableModel);
+        table = new JTable(tableModel);
         JScrollPane tableScrollPane = new JScrollPane(table);
         contentPane.add(tableScrollPane, BorderLayout.CENTER);
 
@@ -42,12 +44,22 @@ public class GererLigue extends MainFrame {
             newFrame.setVisible(true);
             this.dispose();
         });
-        JButton buttonEdit = GuiUtils.createButton("Editer", e -> {
-            ShowLigue newFrame = new ShowLigue();
-            newFrame.setVisible(true);
-        });
 
+        JButton buttonEdit = GuiUtils.createButton("Editer", e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow != -1) {
+                String nomLigue = (String) table.getValueAt(selectedRow, 0); // Nom de la ligue sélectionnée
+                Ligue selectedLigue = findLigueByName(nomLigue);
+                if (selectedLigue != null) {
+                    EditLigue editFrame = new EditLigue(selectedLigue);
+                    editFrame.setVisible(true);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner une ligue à éditer.", "Aucune sélection", JOptionPane.WARNING_MESSAGE);
+            }
+        });
         JButton buttonDelete = new JButton("Supprimer");
+
 
         buttonPanel.add(buttonAdd);
         buttonPanel.add(buttonEdit);
@@ -65,5 +77,14 @@ public class GererLigue extends MainFrame {
         } else {
             System.out.println("gestionPersonnel est null");
         }
+    }
+
+    private Ligue findLigueByName(String nomLigue) {
+        for (Ligue ligue : gestionPersonnel.getLigues()) {
+            if (ligue.getNom().equals(nomLigue)) {
+                return ligue;
+            }
+        }
+        return null;
     }
 }
