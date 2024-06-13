@@ -3,6 +3,9 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
+import personnel.DateInvalide;
+import personnel.SauvegardeImpossible;
+
 public class ShowLigue extends MainFrame {
 
     public ShowLigue() {
@@ -31,7 +34,13 @@ public class ShowLigue extends MainFrame {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         
         JButton buttonEmploye = GuiUtils.createButton("Gérer les employés", e -> {
-            GererEmploye newFrame = new GererEmploye();
+            GererEmploye newFrame = null;
+			try {
+				newFrame = new GererEmploye(null);
+			} catch (DateInvalide | SauvegardeImpossible e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
             newFrame.setVisible(true);
         });
 

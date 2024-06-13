@@ -3,6 +3,9 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
+import personnel.DateInvalide;
+import personnel.SauvegardeImpossible;
+
 public class EditEmploye extends MainFrame {
 
     public EditEmploye() {
@@ -34,7 +37,13 @@ public class EditEmploye extends MainFrame {
 
         // Création bouton 
         JButton button = GuiUtils.createButton("Valider les modifications", e -> {
-            GererEmploye newFrame = new GererEmploye();
+            GererEmploye newFrame = null;
+			try {
+				newFrame = new GererEmploye(null);
+			} catch (DateInvalide | SauvegardeImpossible e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
             newFrame.setVisible(true);
         });
 

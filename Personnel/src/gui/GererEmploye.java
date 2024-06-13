@@ -1,8 +1,10 @@
+
 package gui;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import jdbc.JDBC;
 import personnel.GestionPersonnel;
 import personnel.Ligue;
 import personnel.SauvegardeImpossible;
@@ -19,6 +21,7 @@ public class GererEmploye extends MainFrame {
     private DefaultTableModel tableModel;
     private JTable table;
     private Ligue ligue;
+    private JDBC jdbc;
 
     public GererEmploye(Ligue ligue) throws DateInvalide, SauvegardeImpossible {
         super("Gérer les employés", 600, 400);
@@ -47,13 +50,35 @@ public class GererEmploye extends MainFrame {
         GuiUtils.configurePanel(buttonPanel, new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         JButton buttonAdd = GuiUtils.createButton("Ajouter", e -> {
-            // Ajouter un nouvel employé a suivre
         });
 
         JButton buttonEdit = GuiUtils.createButton("Modifier", e -> {
         });
 
         JButton buttonDelete = GuiUtils.createButton("Supprimer", e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow != -1) {
+                String nomEmploye = (String) table.getValueAt(selectedRow, 0);
+                Employe selectedEmploye = findEmployeByName(nomEmploye);
+                if (selectedEmploye != null) {
+                    int confirmation = JOptionPane.showConfirmDialog(this,
+                            "Êtes-vous sûr de vouloir supprimer l'employé " + selectedEmploye.getNom() + " ?",
+                            "Confirmation de suppression",
+                            JOptionPane.YES_NO_OPTION);
+
+                    if (confirmation == JOptionPane.YES_OPTION) {
+                        try {
+                            selectedEmploye.remove();
+                            loadEmployesData();
+                            JOptionPane.showMessageDialog(this, "Employé supprimé avec succès.", "Suppression réussie", JOptionPane.INFORMATION_MESSAGE);
+                        } catch (SauvegardeImpossible ex) {
+                            JOptionPane.showMessageDialog(this, "Erreur lors de la suppression : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Veuillez sélectionner un employé à supprimer.", "Aucun employé sélectionné", JOptionPane.WARNING_MESSAGE);
+            }
         });
 
         buttonPanel.add(buttonAdd);
@@ -92,6 +117,16 @@ public class GererEmploye extends MainFrame {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erreur lors de la récupération des employés.", "Erreur", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private Employe findEmployeByName(String nomEmploye) {
+        for (Employe employe : ligue.getEmployes()) {
+            if (employe.getNom().equals(nomEmploye)) {
+                return employe;
+            }
+        }
+        return null;
     }
 }

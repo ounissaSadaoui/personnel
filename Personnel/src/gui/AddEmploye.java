@@ -3,6 +3,9 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
+import personnel.DateInvalide;
+import personnel.SauvegardeImpossible;
+
 public class AddEmploye extends MainFrame {
 
     public AddEmploye() {
@@ -32,7 +35,13 @@ public class AddEmploye extends MainFrame {
         
         // Création d'un bouton pour ouvrir la nouvelle fenêtre
         JButton button = GuiUtils.createButton("Ajouter l'employé", e -> {
-            GererEmploye newFrame = new GererEmploye();
+            GererEmploye newFrame = null;
+			try {
+				newFrame = new GererEmploye(null);
+			} catch (DateInvalide | SauvegardeImpossible e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
             newFrame.setVisible(true);
         });
 
