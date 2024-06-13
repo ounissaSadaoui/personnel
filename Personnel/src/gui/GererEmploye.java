@@ -50,6 +50,7 @@ public class GererEmploye extends MainFrame {
         GuiUtils.configurePanel(buttonPanel, new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         JButton buttonAdd = GuiUtils.createButton("Ajouter", e -> {
+            new AddEmploye(ligue, null).setVisible(true);
         });
 
         JButton buttonEdit = GuiUtils.createButton("Modifier", e -> {
@@ -87,7 +88,7 @@ public class GererEmploye extends MainFrame {
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    private void loadEmployesData() {
+    void loadEmployesData() {
         // Vider le modèle de table avant de le remplir à nouveau
         tableModel.setRowCount(0);
 

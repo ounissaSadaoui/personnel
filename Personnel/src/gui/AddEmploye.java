@@ -3,14 +3,19 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
-import personnel.DateInvalide;
-import personnel.SauvegardeImpossible;
+import jdbc.JDBC;
+
+import java.time.LocalDate;
+import personnel.*;
 
 public class AddEmploye extends MainFrame {
+    private Ligue ligue;
+    private GererEmploye parentFrame;
 
-    public AddEmploye() {
-
+    public AddEmploye(Ligue ligue, GererEmploye parentFrame) {
         super("LDO - Ligues Dynamiques et Organisées", 600, 400);
+        this.ligue = ligue;
+        this.parentFrame = parentFrame;
 
         // Récupération du panneau de contenu
         JPanel contentPane = getContentPanePanel();
@@ -33,17 +38,27 @@ public class AddEmploye extends MainFrame {
         JLabel pwdLabel = GuiUtils.createLabel("Mot de passe: ", Color.WHITE);
         JLabel dateArrLabel = GuiUtils.createLabel("Date d'arrivée: ", Color.WHITE);
         
-        // Création d'un bouton pour ouvrir la nouvelle fenêtre
-        JButton button = GuiUtils.createButton("Ajouter l'employé", e -> {
-            GererEmploye newFrame = null;
-			try {
-				newFrame = new GererEmploye(null);
-			} catch (DateInvalide | SauvegardeImpossible e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-            newFrame.setVisible(true);
-        });
+        // Création d'un bouton pour ajouter l'employé
+        
+            // Bouton "Ajouter l'employé"
+            JButton button = GuiUtils.createButton("Ajouter l'employé", e -> {
+                String nom = nameField.getText();
+                String prenom = lastNameField.getText();
+                String mail = mailField.getText();
+                String password = pwdField.getText();
+                LocalDate dateArrivee = LocalDate.parse(dateArrField.getText());
+
+                try {
+                    Employe nouvelEmploye = ligue.addEmploye(nom, prenom, mail, password, dateArrivee, null);
+                  /*  parentFrame.loadEmployesData();*/
+                    JOptionPane.showMessageDialog(this, "Employé ajouté avec succès.", "Succès", JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                } catch (DateInvalide | SauvegardeImpossible ex) {
+                    JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout de l'employé : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            });
+
+
 
         // Panneau pour les champs de texte et le bouton
         JPanel fieldsPanel = new JPanel(new GridBagLayout());
@@ -98,12 +113,11 @@ public class AddEmploye extends MainFrame {
         contentPane.setBackground(backgroundColor);
         fieldsPanel.setBackground(backgroundColor);
         titleLabel.setForeground(Color.WHITE);
-
     }
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new Frame().setVisible(true);
         });
     }
 }
+
