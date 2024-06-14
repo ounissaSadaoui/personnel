@@ -43,8 +43,8 @@ public class EditLigue extends MainFrame {
 
                 // Appeler la méthode update de JDBC pour sauvegarder les modifications
                 try {
-                    JDBC jdbc = new JDBC(); // creation d'une instance de JDBC
-                    jdbc.update(ligueToUpdate); // Appel de la méthode update avec la ligue à mettre à jour
+                    JDBC jdbc = new JDBC(); // creer d'une instance de JDBC
+                    jdbc.update(ligueToUpdate); // appel de la méthode update avec la ligue à mettre à jour
                     jdbc.close(); 
                     JOptionPane.showMessageDialog(this, "Ligue mise à jour avec succès.", "Succès", JOptionPane.INFORMATION_MESSAGE);
                     this.dispose(); // on ferme la fenetre, on laisse ou pas ?

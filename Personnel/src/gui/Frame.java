@@ -73,7 +73,7 @@ public class Frame extends MainFrame {
 
         contentPane.add(fieldsPanel, BorderLayout.CENTER);
     }
-
+    
     private void handleLogin(ActionEvent e) throws SauvegardeImpossible, DateInvalide {
         String username = userField.getText();
         String password = new String(mdpField.getPassword());
@@ -82,7 +82,7 @@ public class Frame extends MainFrame {
         
         if (jdbc.authenticateUser(username, password)) {
             GestionPersonnel gestionPersonnel = jdbc.getGestionPersonnel();
-            GererLigue newFrame = new GererLigue(gestionPersonnel);
+            GererLigue newFrame = new GererLigue(gestionPersonnel, username); // Passer le username ici
             newFrame.setVisible(true);
             this.dispose(); // Fermer la fenêtre de connexion
         } else {
@@ -90,7 +90,6 @@ public class Frame extends MainFrame {
             JOptionPane.showMessageDialog(this, "Nom d'utilisateur ou mot de passe incorrect", "Erreur de connexion", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
     
 
     public static void main(String[] args) {

@@ -70,7 +70,7 @@ public class AddLigue extends MainFrame {
             gestionPersonnel.addLigue(ligueName);
 
             JOptionPane.showMessageDialog(this, "Ligue ajoutée avec succès", "Succès", JOptionPane.INFORMATION_MESSAGE);
-            new GererLigue(gestionPersonnel).setVisible(true);
+            new GererLigue(gestionPersonnel, ligueName).setVisible(true);
             this.dispose();
         } catch (SauvegardeImpossible ex) {
             JOptionPane.showMessageDialog(this, "Erreur lors de l'ajout de la ligue : " + ex.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);

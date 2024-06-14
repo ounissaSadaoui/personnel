@@ -291,7 +291,7 @@
 		    }
 		}
 		
-		//
+		
 		public boolean authenticateUser(String username, String password) {
 		    String query = "SELECT password, idLigue FROM employe WHERE nom = ? ";
 		    try (PreparedStatement statement = connection.prepareStatement(query)) {
